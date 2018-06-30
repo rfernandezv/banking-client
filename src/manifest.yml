@@ -1,8 +1,0 @@
----
-applications:
-- name: banking-client
-  command: node banking-client.js
-  buildpack: staticfile_buildpack
-  memory: 768M
-  instances: 1
-  random-route: true
