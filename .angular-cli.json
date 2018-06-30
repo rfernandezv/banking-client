@@ -10,6 +10,7 @@
       "assets": [
         "assets",
         "favicon.ico",
+        "web.config",
         "manifest.yml"
       ],
       "index": "index.html",
