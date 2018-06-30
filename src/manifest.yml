@@ -1,7 +1,7 @@
 ---
 applications:
 - name: banking-client
-  buildpack: staticfile_buildpack
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack
   memory: 768M
   instances: 1
   random-route: true
