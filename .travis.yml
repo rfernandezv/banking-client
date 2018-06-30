@@ -1,0 +1,29 @@
+language: node_js
+
+node_js:
+  - "8"
+
+branches:
+  only:
+    - master
+
+before_script: # commands to run before the build step
+   - npm install -g --silent @angular/cli
+
+script:
+  - ng build --prod
+
+before_deploy: cd dist
+
+deploy:
+   provider: cloudfoundry
+   username: richar.fernandezv@gmail.com
+   password: ric.fevil.Pivotal.123
+   api: https://api.run.pivotal.io
+   organization: rfernandezv
+   space: qa
+
+notifications:
+  email: # only receive email when the build status changes (someone broke the build!) 
+    on_failure: change
+    on_success: change
