@@ -16,7 +16,6 @@ before_deploy:
 script:
   - ng build --prod
 
-
 deploy:
    provider: cloudfoundry
    username: richar.fernandezv@gmail.com
