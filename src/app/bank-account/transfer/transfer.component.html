@@ -1,3 +1,36 @@
-<p>
-  transfer works!
-</p>
+<div class="transfer-content">
+       
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                  <p>Please complete the information</p>
+
+                  <mat-form-field class="full-width-input">
+                      <mat-select placeholder="Bank Account Origin" [(ngModel)]="data.fromAccountNumber"  formControlName="fromAccountNumber" required>
+                        <mat-option *ngFor="let BankAccountOrigin of BankAccountsOrigin" [value]="BankAccountOrigin.number">
+                          {{BankAccountOrigin.number}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="isFieldInvalid('fromAccountNumber')">
+                          Please select the origin account
+                      </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="full-width-input">
+                      <input matInput placeholder="Bank Account Destination" [(ngModel)]="data.toAccountNumber" formControlName="toAccountNumber" required>
+                      <mat-error *ngIf="isFieldInvalid('toAccountNumber')">
+                          Please complete the destination account
+                      </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="full-width-input" >
+                      <input matInput placeholder="Amount" type="number" [(ngModel)]="data.amount" class="custom-right-align" formControlName="amount" required>
+                      <mat-error *ngIf="isFieldInvalid('amount')">
+                          Please complete the amount
+                      </mat-error>
+                      <span matPrefix>S/.&nbsp;</span>
+                      <span matSuffix>.00</span>
+                  </mat-form-field>
+
+                  <button mat-raised-button color="primary" type="submit" class="full-width-input">Transfer</button>
+              </form>
+</div>
+

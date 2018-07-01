@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/theming';
+@import "~ng2-toastr/bundles/ng2-toastr.min.css";
 @import url('//fonts.googleapis.com/icon?family=Material+Icons');
 
 @include mat-core();

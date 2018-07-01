@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  apiUrl : 'https://api.github.com/repos/angular/angular/'
+  apiUrl : 'https://api.github.com/repos/angular/angular/',
+  apiUrlTransfer : 'https://java-banking-api.cfapps.io/api/'  // 'https://banking-qa-agile-sitatunga.cfapps.io/api/'
 };

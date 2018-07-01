@@ -7,10 +7,9 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class DataService {
   servicio : String = 'issues';
-  private readonly API_URL = 'https://api.github.com/repos/angular/angular/issues'; //environment.apiUrl + this.servicio;
+  private readonly API_URL = environment.apiUrl + this.servicio;
 
   dataChange: BehaviorSubject<Issue[]> = new BehaviorSubject<Issue[]>([]);
-  // Temporarily stores data from dialogs
   dialogData: any;
 
   constructor (private httpClient: HttpClient) {}

@@ -1,0 +1,24 @@
+md-card {
+  max-width: 400px;
+  margin: 2em auto;
+  text-align: center;
+}
+.transfer-content {
+  max-width: 450px;
+  margin: 2em auto;
+  text-align: center;
+  padding: 60px 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.full-width-input {
+  width: 100%;
+}
+
+.custom-right-align {
+  text-align: right;
+}
+
+input.custom-right-align {
+  -moz-appearance: textfield;
+}
