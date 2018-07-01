@@ -13,11 +13,5 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() : void{
-    console.log("richar");
-    /*
-      this.http.get(environment.apiUrl+'/users/getAllUsers').subscribe(data => {
-        console.log(data);
-      });
-      */
     }  
 }

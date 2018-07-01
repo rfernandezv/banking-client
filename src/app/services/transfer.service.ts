@@ -13,7 +13,7 @@ import 'rxjs/add/observable/throw';
 
 const httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type':  'application/json', // application/json; charset=UTF-8
+      'Content-Type':  'application/json',
       'Access-Control-Allow-Origin': '*'
       //'Authorization': 'my-auth-token'
     })
@@ -21,9 +21,7 @@ const httpOptions = {
   
 @Injectable()
 export class TranferDataService {
-  servicio : string = 'transfers';  
-  responseAPI : ResponseService;
-  API_URL : string = environment.apiUrlTransfer + this.servicio;
+  API_URL : string = environment.apiUrlJava + 'transfers';
   constructor (private httpClient: HttpClient) {}
 
   newTransferAccount(transfer : Transfer): Observable<ResponseService> {
