@@ -15,7 +15,7 @@ deploy:
   password: 
     secure: "Do8ryTKAwXbyOeAD9zEbhmqCwgwu5Fpbpio7FDyv4952XrIPnL6KkgGbrAHGSy4STwOpHA+64j/fPP+vWkMgZt5qlHGdKIybFyXjmtZc+HGbVyn/J+aA9z1serLcS2WQhOK4FW2ZNVgRngKpd/SUnQ/GavtkITCFmbgU+3TqdRWNvsxEncM3JGvLoavrzySAALEQ4mi2Zh8wwfbpMDy6a9u4RiZ+tlxCTFhuKGmwFlypB4c+Y6vZYgNgJxrMrmjp7LBvfWYyijsx1X3+VG+g1U5dAWrjvgrtlxaQR3o5zI4Vnow8AZWyPfher4qQm/jkLbbiV2sMQWzaPMnGkCtxbxDQBU3dIp1bRgevZWBZCvkhg+aHRBQIdY4MlRzdoV70IWd6g60P7AjN3IWJu7XyVW0GBx7nqin24f94zSsZHKt7i5A3sURruTypAH5RSsIB4LY5h6jIoewnecPMAfBwkus+MDVAF0IFEQL09XBvqTVLZjJVKKfyvQjhF7V+CupZqDsvTlZArQ6MzSXvNf8dxNqbBcWEg18LTW8Sc6nRDHYDNHwVMIe5NL+l4e8LnjfDtSMoi3pZ9Cb0TJ7ZDU/8VTqG2d491kYzuZGAzrX2I8ZeaLwHnZyiBdxCMaVbTlQwLXDbNOKLNjckdPQf/m49EbZX1Uj/gDtNq3gmnqUBmck="
   api: https://api.run.pivotal.io
-  organization: 
+  organization: rfernandezv
     
   space: qa
 notifications:
