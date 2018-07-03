@@ -1,7 +1,11 @@
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
-import {DataService} from '../../services/issue.service';
+import {CustomerService} from '../../services/customer.service';
+import {Customer} from '../../models/customer';
 import {FormControl, Validators} from '@angular/forms';
+import {RequestCustomerDto} from '../../models/dto/requestCustomerDto';
+import {MessageAlertHandleService} from '../../services/message-alert.service';
+
 
 @Component({
   selector: 'app-baza.dialog',
@@ -9,13 +13,16 @@ import {FormControl, Validators} from '@angular/forms';
   styleUrls: ['./edit.dialog.css']
 })
 export class EditDialogComponent {
+  requestCustomer: RequestCustomerDto;
 
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService) { }
+              @Inject(MAT_DIALOG_DATA) public data: Customer, 
+              public _messageAlertHandleService: MessageAlertHandleService,
+              public _customerService: CustomerService) { }
 
   formControl = new FormControl('', [
-    Validators.required
-    // Validators.email,
+    Validators.required,
+    Validators.email
   ]);
 
   getErrorMessage() {
@@ -25,14 +32,34 @@ export class EditDialogComponent {
   }
 
   submit() {
-    // emppty stuff
+    
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  stopEdit(): void {
-    this.dataService.updateIssue(this.data);
+  confirmEdit(): void {
+    this.requestCustomer = new RequestCustomerDto()
+        .setFirstName(this.data.firstName)
+        .setLastName(this.data.lastName)
+        .setDocumentNumber(this.data.documentNumber)
+        .setBirthDate(this.data.birthDate)
+        .setCellphone(this.data.cellphone)
+        .setEmail(this.data.email)
+        .setIsActive(this.data.isActive)
+        .setUser(this.data.user)
+        .setPassword(this.data.password)
+        .setRolId(this.data.id_rol)
+    ;
+
+    this._customerService.updateCustomer(this.data.customerId, this.requestCustomer).subscribe({
+      error: (err: any) => {
+          this._messageAlertHandleService.handleError(err);
+      },
+      complete: () => {
+          this._messageAlertHandleService.handleSuccess('Updated successfully');       
+      }
+    });
   }
 }

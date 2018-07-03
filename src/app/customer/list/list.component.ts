@@ -1,9 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {DataService} from '../../services/issue.service';
+import {CustomerService} from '../../services/customer.service';
 import {HttpClient} from '@angular/common/http';
 import {MatDialog, MatPaginator, MatSort} from '@angular/material';
-import {Issue} from '../.././models/issue';
-import { Observable } from 'rxjs/Observable';
+import {Customer} from '../.././models/customer';
+import {Observable } from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {DataSource} from '@angular/cdk/collections';
 import 'rxjs/add/observable/merge';
@@ -11,11 +11,10 @@ import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AddDialogComponent} from '.././add/add.dialog.component';
 import {EditDialogComponent} from '.././edit/edit.dialog.component';
 import {DeleteDialogComponent} from '.././delete/delete.dialog.component';
-
 
 
 @Component({
@@ -24,15 +23,15 @@ import {DeleteDialogComponent} from '.././delete/delete.dialog.component';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  displayedColumns = ['id', 'title', 'state', 'url', 'created_at', 'updated_at', 'actions'];
-  exampleDatabase: DataService | null;
-  dataSource: ExampleDataSource | null;
+  displayedColumns = ['customerId', 'firstName', 'lastName', 'documentNumber', 'cellphone', 'email', 'actions'];
+  customerDataBase: CustomerService | null;
+  customerDataSource: CustomerDataSource | null;
   index: number;
   id: number;
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
-              public dataService: DataService) {}
+              public _CustomerService: CustomerService) {}
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -46,94 +45,93 @@ export class ListComponent implements OnInit {
     this.loadData();
   }
 
-  addNew(issue: Issue) {
-    const dialogRef = this.dialog.open(AddDialogComponent, {
-      data: {issue: issue }
-    });
+  addNew(customer: Customer) {
+      const dialogRef = this.dialog.open(AddDialogComponent, {
+        data: {customer: customer }
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) {
-        // After dialog is closed we're doing frontend updates
-        // For add we're just pushing a new row inside DataService
-        this.exampleDatabase.dataChange.value.push(this.dataService.getDialogData());
-        this.refreshTable();
-      }
-    });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+            if(this._CustomerService.getDialogData() != null){
+              this.customerDataBase.dataChange.value.push(this._CustomerService.getDialogData());
+              this.refreshTable();
+            }          
+        }
+      });
   }
 
-  startEdit(i: number, id: number, title: string, state: string, url: string, created_at: string, updated_at: string) {
-    this.id = id;
-    // index row is used just for debugging proposes and can be removed
-    this.index = i;
-    console.log(this.index);
-    const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: {id: id, title: title, state: state, url: url, created_at: created_at, updated_at: updated_at}
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) {
-        // When using an edit things are little different, firstly we find record inside DataService by id
-        const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
-        // Then you update that record using data from dialogData (values you enetered)
-        this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
-        // And lastly refresh table
-        this.refreshTable();
-      }
-    });
+  startEdit(i: number, customerId: number, firstName: string, lastName: string, documentNumber: string, cellphone: string, email: string) {
+      this.id = customerId;
+      this.index = i;
+      console.log(this.index);
+      const dialogRef = this.dialog.open(EditDialogComponent, {
+        data: {customerId: customerId, firstName: firstName, lastName: lastName, documentNumber: documentNumber, cellphone: cellphone, email: email}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.customerId === this.id);
+          this.customerDataBase.dataChange.value[foundIndex] = this._CustomerService.getDialogData();
+          this.refreshTable();
+        }
+      });
   }
 
-  deleteItem(i: number, id: number, title: string, state: string, url: string) {
-    this.index = i;
-    this.id = id;
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: {id: id, title: title, state: state, url: url}
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) {
-        const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
-        // for delete we use splice in order to remove single object from DataService
-        this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
-        this.refreshTable();
-      }
-    });
-}
+  deleteItem(i: number, customerId: number, firstName: string, lastName: string, documentNumber: string) {
+      this.index = i;
+      this.id = customerId;
+      const dialogRef = this.dialog.open(DeleteDialogComponent, {
+        data: {customerId: customerId, firstName: firstName, lastName: lastName, documentNumber: documentNumber}
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.customerId === this.id);
+          this.customerDataBase.dataChange.value.splice(foundIndex, 1);
+          this.refreshTable();
+        }
+      });
+  }
 
 
   private refreshTable() {
-    if (this.dataSource._paginator.hasNextPage()) {
-      this.dataSource._paginator.nextPage();
-      this.dataSource._paginator.previousPage();
-    } else if (this.dataSource._paginator.hasPreviousPage()) {
-      this.dataSource._paginator.previousPage();
-      this.dataSource._paginator.nextPage();
-    } else {
-      this.dataSource.filter = '';
-      this.dataSource.filter = this.filter.nativeElement.value;
-    }
+      if (this.customerDataSource._paginator.hasNextPage()) {
+        this.customerDataSource._paginator.nextPage();
+        this.customerDataSource._paginator.previousPage();
+      } else if (this.customerDataSource._paginator.hasPreviousPage()) {
+        this.customerDataSource._paginator.previousPage();
+        this.customerDataSource._paginator.nextPage();
+      } else {
+        this.customerDataSource.filter = '';
+        this.customerDataSource.filter = this.filter.nativeElement.value;
+      }
   }
 
+
   public loadData() {
-    this.exampleDatabase = new DataService(this.httpClient);
-    this.dataSource = new ExampleDataSource(this.exampleDatabase, this.paginator, this.sort);
+    this.customerDataBase = new CustomerService(this.httpClient);
+    this.customerDataSource = new CustomerDataSource(this.customerDataBase, this.paginator, this.sort);
 
     
     Observable.fromEvent(this.filter.nativeElement, 'keyup')
-      .debounceTime(150)
-      .distinctUntilChanged()
-      .subscribe(() => {
-        if (!this.dataSource) {
-          return;
-        }
-        this.dataSource.filter = this.filter.nativeElement.value;
-      });
-      
+        .debounceTime(150)
+        .distinctUntilChanged()
+        .subscribe(() => {
+          if (!this.customerDataSource) {
+            return;
+          }
+          this.customerDataSource.filter = this.filter.nativeElement.value;
+        });      
   }
+
 }
 
 
-export class ExampleDataSource extends DataSource<Issue> {
+export class CustomerDataSource extends DataSource<Customer> {
   _filterChange = new BehaviorSubject('');
+  searchStr : string;
 
   get filter(): string {
     return this._filterChange.value;
@@ -143,52 +141,52 @@ export class ExampleDataSource extends DataSource<Issue> {
     this._filterChange.next(filter);
   }
 
-  filteredData: Issue[] = [];
-  renderedData: Issue[] = [];
+  filteredData: Customer[] = [];
+  renderedData: Customer[] = [];
 
-  constructor(public _exampleDatabase: DataService,
+  constructor(public _customerDatabase: CustomerService,
               public _paginator: MatPaginator,
               public _sort: MatSort) {
     super();
-    // Reset to the first page when the user changes the filter.
     this._filterChange.subscribe(() => this._paginator.pageIndex = 0);
   }
 
-    /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<Issue[]> {
-        // Listen for any changes in the base data, sorting, filtering, or pagination
+  connect(): Observable<Customer[]> {
         const displayDataChanges = [
-          this._exampleDatabase.dataChange,
+          this._customerDatabase.dataChange,
           this._sort.sortChange,
           this._filterChange,
           this._paginator.page
         ];
 
-        this._exampleDatabase.getAllIssues();
+        this._customerDatabase.getAllCustomers();
+        if(this._customerDatabase.data.length > 0){
 
-        this.filteredData = this._exampleDatabase.data.slice().filter((issue: Issue) => {
-          const searchStr = (issue.id + issue.title + issue.url + issue.created_at).toLowerCase();
+          
+        }
+
+        this.filteredData = this._customerDatabase.data.slice().filter((customer: Customer) => {
+          const searchStr = (customer.firstName + customer.lastName + customer.documentNumber).toLowerCase();
           return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
         });
 
-        // Sort filtered data
         const sortedData = this.sortData(this.filteredData.slice());
 
-        // Grab the page's slice of the filtered sorted data.
         const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
         this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
 
         return Observable.merge(...displayDataChanges).map(() => {
-          // Filter data
-          this.filteredData = this._exampleDatabase.data.slice().filter((issue: Issue) => {
-            const searchStr = (issue.id + issue.title + issue.url + issue.created_at).toLowerCase();
-            return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+          this.filteredData = this._customerDatabase.data.slice().filter((customer: Customer) => {
+            if(customer.customerId == undefined){
+              this.searchStr = '';
+            }else{
+              this.searchStr = (customer.firstName + customer.lastName + customer.documentNumber).toLowerCase();
+            }            
+            return this.searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
 
-          // Sort filtered data
           const sortedData = this.sortData(this.filteredData.slice());
 
-          // Grab the page's slice of the filtered sorted data.
           const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
           this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
           return this.renderedData;
@@ -196,11 +194,11 @@ export class ExampleDataSource extends DataSource<Issue> {
       
     }
 
+
     disconnect() {
     }
 
-    /** Returns a sorted copy of the database data. */
-    sortData(data: Issue[]): Issue[] {
+    sortData(data: Customer[]): Customer[] {
         if (!this._sort.active || this._sort.direction === '') {
           return data;
         }
@@ -210,12 +208,12 @@ export class ExampleDataSource extends DataSource<Issue> {
           let propertyB: number | string = '';
 
           switch (this._sort.active) {
-            case 'id': [propertyA, propertyB] = [a.id, b.id]; break;
-            case 'title': [propertyA, propertyB] = [a.title, b.title]; break;
-            case 'state': [propertyA, propertyB] = [a.state, b.state]; break;
-            case 'url': [propertyA, propertyB] = [a.url, b.url]; break;
-            case 'created_at': [propertyA, propertyB] = [a.created_at, b.created_at]; break;
-            case 'updated_at': [propertyA, propertyB] = [a.updated_at, b.updated_at]; break;
+            case 'customerId': [propertyA, propertyB] = [a.customerId, b.customerId]; break;
+            case 'firstName': [propertyA, propertyB] = [a.firstName, b.firstName]; break;
+            case 'lastName': [propertyA, propertyB] = [a.lastName, b.lastName]; break;
+            case 'documentNumber': [propertyA, propertyB] = [a.documentNumber, b.documentNumber]; break;
+            case 'cellphone': [propertyA, propertyB] = [a.cellphone, b.cellphone]; break;
+            case 'email': [propertyA, propertyB] = [a.email, b.email]; break;
           }
 
           const valueA = isNaN(+propertyA) ? propertyA : +propertyA;

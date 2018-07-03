@@ -4,7 +4,7 @@ import { ListComponent } from './list/list.component';
 import { TransferComponent } from './transfer/transfer.component';
 
 import { HttpClientModule} from '@angular/common/http';
-import { TranferDataService } from '../services/transfer.service';
+import { TranferService } from '../services/transfer.service';
 import { MessageAlertHandleService} from '../services/message-alert.service';
 
 import {

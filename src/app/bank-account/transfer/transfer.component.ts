@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { ResponseService } from '../../models/response';
 import { Validators, FormBuilder, FormGroup} from '@angular/forms';
-import { TranferDataService } from '../../services/transfer.service';
+import { TranferService } from '../../services/transfer.service';
 import { MessageAlertHandleService} from '../../services/message-alert.service';
 
 
@@ -36,7 +36,7 @@ export class TransferComponent implements OnInit, OnDestroy {
       public dialog: MatDialog,
       public dialogRef: MatDialogRef<TransferComponent>,
       @Inject(MAT_DIALOG_DATA) public data: Transfer,
-      public _tranferDataService: TranferDataService,
+      public _tranferService: TranferService,
       public _messageAlertHandleService: MessageAlertHandleService,
       private router: Router
   ) {}
@@ -78,13 +78,13 @@ export class TransferComponent implements OnInit, OnDestroy {
     this.formSubmitAttempt = true;
     this.isSave = false;
     if (this.form.valid) {
-      this.transferAccount(this.data);
+      this.newTransferAccount(this.data);
     }
   }
 
-  transferAccount(transfer: Transfer) : void {
+  newTransferAccount(transfer: Transfer) : void {
 
-    let transferSuscription = this._tranferDataService.newTransferAccount(transfer).subscribe({
+    let transferSuscription = this._tranferService.newTransferAccount(transfer).subscribe({
       error: (err: any) => {
           this._messageAlertHandleService.handleError(err);
       },
@@ -94,19 +94,6 @@ export class TransferComponent implements OnInit, OnDestroy {
       }
     });
     this.subscription.add(transferSuscription);
-
-    /*
-      const transferSuscription = this.tranferDataService.newTransferAccount(transfer)
-                                        .subscribe(  resp => {
-                                                this.responseAPI = resp;
-                                                if(this.responseAPI.httpStatus == '201'){                             
-                                                  this.isSave = true;
-                                                  this.reset();                             
-                                                }
-                                                this.openDialog();                                               
-                                              },
-                                          error => this.errorMessage = <any>error);
-                                          */
   }
 
   private reset() {
@@ -114,8 +101,6 @@ export class TransferComponent implements OnInit, OnDestroy {
     this.data.toAccountNumber = null;
     this.data.amount = null;    
   }
-
-
 
 }
 

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ListComponent } from './list/list.component';
 
 import {HttpClientModule} from '@angular/common/http';
-import {DataService} from '../services/issue.service';
+import {CustomerService} from '../services/customer.service';
 
 import {
   MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule,

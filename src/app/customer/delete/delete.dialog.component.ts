@@ -1,6 +1,8 @@
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
-import {DataService} from '../../services/issue.service';
+import {Customer} from '../../models/customer';
+import {CustomerService} from '../../services/customer.service';
+import {MessageAlertHandleService} from '../../services/message-alert.service';
 
 
 @Component({
@@ -11,13 +13,22 @@ import {DataService} from '../../services/issue.service';
 export class DeleteDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<DeleteDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public dataService: DataService) { }
+              @Inject(MAT_DIALOG_DATA) public data: Customer, 
+              public _messageAlertHandleService: MessageAlertHandleService,
+              public _customerService: CustomerService) { }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   confirmDelete(): void {
-    this.dataService.deleteIssue(this.data.id);
+    this._customerService.deleteCustomer(this.data.customerId).subscribe({
+      error: (err: any) => {
+          this._messageAlertHandleService.handleError(err);
+      },
+      complete: () => {
+          this._messageAlertHandleService.handleSuccess('Registered successfully');       
+      }
+    });
   }
 }

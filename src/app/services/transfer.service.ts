@@ -13,18 +13,17 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 
 @Injectable()
-export class TranferDataService {
+export class TranferService {
   API_URL : string = environment.apiUrlJava + 'transfers';
   constructor (private httpClient: HttpClient) {}
 
   newTransferAccount(transfer : Transfer): Observable<ResponseService> {
-
-    return this.httpClient
-               .post(this.API_URL, transfer,  HttpOptionsConst)
-               .map(
-                res => res
-               )
-               .catch((error: any) => Observable.throw(error || 'Server error'));
+      return this.httpClient
+                .post(this.API_URL, transfer,  HttpOptionsConst)
+                .map(
+                  res => res
+                )
+                .catch((error: any) => Observable.throw(error || 'Server error'));
   }
 
 

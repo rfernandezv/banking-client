@@ -20,8 +20,8 @@ import { AddDialogComponent} from './customer/add/add.dialog.component';
 import { EditDialogComponent} from './customer/edit/edit.dialog.component';
 import { DeleteDialogComponent} from './customer/delete/delete.dialog.component';
 import { TransfersDialog } from './bank-account/transfer/transfer.component';
-import { DataService} from './services/issue.service';
-import { TranferDataService} from './services/transfer.service';
+import { TranferService} from './services/transfer.service';
+import { CustomerService} from './services/customer.service';
 import { MessageAlertHandleService} from './services/message-alert.service';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -65,16 +65,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MatTableModule,
     MatToolbarModule,
     MatPaginatorModule
-
   ],
-  providers: [AuthService, AuthGuard, DataService, TranferDataService, MessageAlertHandleService, 
-    {
-    provide: MatDialogRef,
-    useValue: {}
-  }, {
-    provide: MAT_DIALOG_DATA,
-    useValue: {} // Add any data you wish to test if it is passed/used correctly
-  }],
+  providers: [
+    AuthService, AuthGuard, TranferService, CustomerService, MessageAlertHandleService, 
+    { provide: MatDialogRef, useValue: {} }, 
+    { provide: MAT_DIALOG_DATA, useValue: {}}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
