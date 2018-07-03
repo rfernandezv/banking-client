@@ -14,7 +14,7 @@ import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class TranferService {
-  API_URL : string = environment.apiUrlJava + 'transfers';
+  API_URL : string = environment.apiUrl + 'transfers';
   constructor (private httpClient: HttpClient) {}
 
   newTransferAccount(transfer : Transfer): Observable<ResponseService> {

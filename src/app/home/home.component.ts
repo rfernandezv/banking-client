@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Globals} from '../shared/globals';
 import { environment } from '../../environments/environment';
 
 
@@ -9,7 +10,9 @@ import { environment } from '../../environments/environment';
   styles: []
 })
 export class HomeComponent implements OnInit {
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient,
+              public globals : Globals
+    ){
   }
 
   ngOnInit() : void{

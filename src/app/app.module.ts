@@ -22,6 +22,7 @@ import { DeleteDialogComponent} from './customer/delete/delete.dialog.component'
 import { TransfersDialog } from './bank-account/transfer/transfer.component';
 import { TranferService} from './services/transfer.service';
 import { CustomerService} from './services/customer.service';
+import { Globals} from './shared/globals';
 import { MessageAlertHandleService} from './services/message-alert.service';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -67,7 +68,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MatPaginatorModule
   ],
   providers: [
-    AuthService, AuthGuard, TranferService, CustomerService, MessageAlertHandleService, 
+    AuthService, AuthGuard, TranferService, CustomerService, MessageAlertHandleService, Globals,
     { provide: MatDialogRef, useValue: {} }, 
     { provide: MAT_DIALOG_DATA, useValue: {}}
   ],

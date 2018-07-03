@@ -14,7 +14,7 @@ import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class CustomerService {
-  API_URL : string = environment.apiUrlJava + 'customer';
+  API_URL : string = environment.apiUrl + 'customer';
 
   dataChange: BehaviorSubject<Customer[]> = new BehaviorSubject<Customer[]>([]);
   dialogData: Customer;  
@@ -31,7 +31,7 @@ export class CustomerService {
 
   getAllCustomers(): void {
     this.httpClient.get<Customer[]>(this.API_URL).subscribe(data => {
-        this.dataChange.next(data);
+        this.dataChange.next(data);        
       },
       (error: HttpErrorResponse) => {
           console.log (error.name + ' ' + error.message);

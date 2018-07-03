@@ -10,4 +10,52 @@ export class Customer {
     user : string;
     password : string;
     id_rol : number;
+
+    constructor() {}
+
+    public setCustomerId(value: number): Customer {
+        this.customerId = value;
+        return this;
+    }
+
+    public setFirstName(value: string): Customer {
+        this.firstName = value;
+        return this;
+    }
+    public setLastName(value: string): Customer {
+        this.lastName = value;
+        return this;
+    }
+    public setBirthDate(value: string): Customer {
+        this.birthDate = value;
+        return this;
+    }
+    public setDocumentNumber(value: string): Customer {
+        this.documentNumber = value;
+        return this;
+    }
+    public setIsActive(value: string): Customer {
+        this.isActive = value;
+        return this;
+    }
+    public setCellphone(value: string): Customer {
+        this.cellphone = value;
+        return this;
+    }
+    public setEmail(value: string): Customer {
+        this.email = value;
+        return this;
+    }
+    public setUser(value: string): Customer {
+        this.user = value;
+        return this;
+    }
+    public setPassword(value: string): Customer {
+        this.password = value;
+        return this;
+    }
+    public setRolId(value: number): Customer {
+        this.id_rol = value;
+        return this;
+    }
 }
