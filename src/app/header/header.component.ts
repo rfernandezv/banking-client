@@ -1,27 +1,20 @@
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from './../auth/auth.service';
 import { Component, OnInit } from '@angular/core';
+import { Globals} from '../shared/globals';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styles: [
-    `.angular-logo {
-        margin: 0 4px 3px 0;
-        height: 35px;
-        vertical-align: middle;
-    }
-    .fill-remaining-space {
-      flex: 1 1 auto;
-    }
-    `
-  ]
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
 
   isLoggedIn$: Observable<boolean>;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              public globals : Globals
+  ) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.authService.isLoggedIn;

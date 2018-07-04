@@ -4,9 +4,18 @@
     Banking v0.1
   </span>
   <span class="fill-remaining-space"></span>
+  <button mat-button routerLink="dashboard" > <mat-icon>home</mat-icon> </button>  
   <button mat-button routerLink="customer/list" >Customer</button>  
   <button mat-button routerLink="bank-account/list" >Bank Account</button>
   <button mat-button routerLink="bank-account/transfer">Transfers</button>
   <button mat-button (click)="onLogout()" *ngIf="isLoggedIn">Logout</button>
 </mat-toolbar>
+<div class="signin-content" *ngIf="isLoggedIn$ | async as isLoggedIn">
+    <mat-card>
+        <mat-card-content>
+              Customer <b> {{globals.customer.firstName + ' ' + globals.customer.lastName}} </b>
+      </mat-card-content>
+  </mat-card>
+</div>
+
 
