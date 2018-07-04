@@ -41,27 +41,27 @@ export class AddDialogComponent {
 
   public confirmAdd(): void {    
 
-    this.requestCustomer = new RequestCustomerDto()
-        .setFirstName(this.data.firstName)
-        .setLastName(this.data.lastName)
-        .setDocumentNumber(this.data.documentNumber)
-        .setBirthDate(this.data.birthDate)
-        .setCellphone(this.data.cellphone)
-        .setEmail(this.data.email)
-        .setIsActive('1')
-        .setUser(this.data.user)
-        .setPassword(this.data.password)
-        .setRolId(1)
-    ;
-    this._customerService.addCustomer(this.requestCustomer).subscribe({
-      error: (err: any) => {
-        this._customerService.dialogData = null;
-          this._messageAlertHandleService.handleError(err);
-      },
-      complete: () => {
-          this._customerService.dialogData = this.data;
-          this._messageAlertHandleService.handleSuccess('Registered successfully');       
-      }
-    });
+        this.requestCustomer = new RequestCustomerDto()
+            .setFirstName(this.data.firstName)
+            .setLastName(this.data.lastName)
+            .setDocumentNumber(this.data.documentNumber)
+            .setBirthDate(this.data.birthDate)
+            .setCellphone(this.data.cellphone)
+            .setEmail(this.data.email)
+            .setIsActive('1')
+            .setUser(this.data.user)
+            .setPassword(this.data.password)
+            .setRolId(1)
+        ;
+        this._customerService.addCustomer(this.requestCustomer).subscribe({
+          error: (err: any) => {
+            this._customerService.dialogData = null;
+              this._messageAlertHandleService.handleError(err);
+          },
+          complete: () => {
+              this._customerService.dialogData = this.data;
+              this._messageAlertHandleService.handleSuccess('Registered successfully');       
+          }
+        });
   }
 }

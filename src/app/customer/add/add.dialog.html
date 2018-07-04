@@ -51,7 +51,7 @@
         <input matInput #input class="form-control" type="password" placeholder="Password" [(ngModel)]="data.password" name="password" required >
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
-    </div>    
+    </div>
 
     <div mat-dialog-actions>
       <button mat-button [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="confirmAdd()">Save</button>

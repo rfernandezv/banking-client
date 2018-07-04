@@ -34,7 +34,7 @@ export class AuthService {
   login(user: User) {
     if (user.userName !== '' && user.password !== '' ) {      
 
-       this.loginAPI(user.userName, user.password).subscribe(
+       this.authentication(user.userName, user.password).subscribe(
               successData => {
                 //successData.
                 this.globals.customer = successData;
@@ -42,7 +42,7 @@ export class AuthService {
               error => {
                 this._messageAlertHandleService.handleError("Your credentials are not correct, try again");
 
-                ///////// prueba /////////
+                ///////// rfv /////////
                 this.globals.customer = new Customer()
                     .setRolId(1)
                     .setFirstName('Richar')
@@ -66,7 +66,7 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  loginAPI(username : string, password : string ): Observable<Customer> {
+  authentication(username : string, password : string ): Observable<Customer> {
     return this.httpClient
               .post(this.API_URL, { username: username, password: password},  HttpOptionsConst)
               .map(

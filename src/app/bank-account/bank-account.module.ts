@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListComponent } from './list/list.component';
 import { TransferComponent } from './transfer/transfer.component';
-
 import { HttpClientModule} from '@angular/common/http';
 import { TranferService } from '../services/transfer.service';
+import { BankAccountService } from '../services/bank-account.service';
 import { MessageAlertHandleService} from '../services/message-alert.service';
 
 import {

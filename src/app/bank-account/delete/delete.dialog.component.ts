@@ -1,7 +1,7 @@
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
-import {Customer} from '../../models/customer';
-import {CustomerService} from '../../services/customer.service';
+import {BankAccount} from '../../models/bank-account';
+import {BankAccountService} from '../../services/bank-account.service';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
 
 
@@ -10,19 +10,23 @@ import {MessageAlertHandleService} from '../../services/message-alert.service';
   templateUrl: './delete.dialog.html',
   styleUrls: ['./delete.dialog.css']
 })
-export class DeleteDialogComponent {
+export class DeleteDialogBankComponent {
 
-  constructor(public dialogRef: MatDialogRef<DeleteDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: Customer, 
+  constructor(public dialogRef: MatDialogRef<DeleteDialogBankComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: BankAccount, 
               public _messageAlertHandleService: MessageAlertHandleService,
-              public _customerService: CustomerService) { }
+              public _bankAccountService: BankAccountService) { }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
+  getDescriptionIsLocked(isLocked : boolean) : string{
+    return (isLocked)?'Yes':'No';
+  }
+
   confirmDelete(): void {
-    this._customerService.deleteCustomer(this.data.customerId).subscribe({
+    this._bankAccountService.deleteBankAccount(this.data.id).subscribe({
       error: (err: any) => {
           this._messageAlertHandleService.handleError(err);
       },

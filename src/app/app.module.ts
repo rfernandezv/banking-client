@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule} from '@angular/common/http';
 import {
   MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule,
-  MatTableModule, MatToolbarModule, MAT_DIALOG_DATA, MatDialogRef
+  MatCheckboxModule, MatTableModule, MatToolbarModule, MAT_DIALOG_DATA, MatDialogRef
 } from '@angular/material';
 import { ToastModule } from 'ng2-toastr';
 import { AppMaterialModule } from './app-material/app-material.module';
@@ -19,9 +19,13 @@ import { CurrentOptionComponent } from './current-option/current-option.componen
 import { AddDialogComponent} from './customer/add/add.dialog.component';
 import { EditDialogComponent} from './customer/edit/edit.dialog.component';
 import { DeleteDialogComponent} from './customer/delete/delete.dialog.component';
+import { AddDialogBankComponent} from './bank-account/add/add.dialog.component';
+import { EditDialogBankComponent} from './bank-account/edit/edit.dialog.component';
+import { DeleteDialogBankComponent} from './bank-account/delete/delete.dialog.component';
 import { TransfersDialog } from './bank-account/transfer/transfer.component';
 import { TranferService} from './services/transfer.service';
 import { CustomerService} from './services/customer.service';
+import { BankAccountService} from './services/bank-account.service';
 import { Globals} from './shared/globals';
 import { MessageAlertHandleService} from './services/message-alert.service';
 
@@ -39,12 +43,18 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     AddDialogComponent,
     EditDialogComponent,
     DeleteDialogComponent,
+    AddDialogBankComponent,
+    EditDialogBankComponent,
+    DeleteDialogBankComponent,
     TransfersDialog  
   ],
   entryComponents: [
     AddDialogComponent,
     EditDialogComponent,
     DeleteDialogComponent,
+    AddDialogBankComponent,
+    EditDialogBankComponent,
+    DeleteDialogBankComponent,
     TransfersDialog
   ],
   imports: [
@@ -65,10 +75,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MatSortModule,
     MatTableModule,
     MatToolbarModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatCheckboxModule
   ],
   providers: [
-    AuthService, AuthGuard, TranferService, CustomerService, MessageAlertHandleService, Globals,
+    AuthService, AuthGuard, TranferService, CustomerService, BankAccountService, MessageAlertHandleService, Globals,
     { provide: MatDialogRef, useValue: {} }, 
     { provide: MAT_DIALOG_DATA, useValue: {}}
   ],

@@ -24,11 +24,11 @@ export class TransferComponent implements OnInit, OnDestroy {
   private formSubmitAttempt: boolean = false;
 
   BankAccountsOrigin: BankAccount[] = [
-    {id: 1, number: '123-456-001', balance: 1500, isLocked: false, customerId: 1, customerName:'Richar'}    
+    new BankAccount().setId(1).setNumber('123-456-001').setBalance(1500).setIsLocked(false).setCustomerId(1)
   ];
 
   BankAccountsDestination: BankAccount[] = [
-    {id: 2, number: '123-456-002', balance: 1800, isLocked: false, customerId: 2, customerName:'Richar'}
+    new BankAccount().setId(2).setNumber('123-456-002').setBalance(1800).setIsLocked(false).setCustomerId(2)
   ];
 
   constructor(
