@@ -160,10 +160,6 @@ export class CustomerDataSource extends DataSource<Customer> {
         ];
 
         this._customerDatabase.getAllCustomers();
-        if(this._customerDatabase.data.length > 0){
-
-          
-        }
 
         this.filteredData = this._customerDatabase.data.slice().filter((customer: Customer) => {
           const searchStr = (customer.firstName + customer.lastName + customer.documentNumber).toLowerCase();
