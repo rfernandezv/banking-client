@@ -5,13 +5,13 @@
           <img src="assets/img/logo_unmsm.png" width="80" >
         <p>Please login to continue</p>
         <mat-form-field class="full-width-input">
-          <input matInput placeholder="User" formControlName="userName" required>
+          <input matInput placeholder="User" formControlName="userName" maxlength="40" required>
           <mat-error *ngIf="isFieldInvalid('userName')">
             Please complete your user name
           </mat-error>
         </mat-form-field>
         <mat-form-field class="full-width-input">
-          <input matInput type="password" placeholder="Password" formControlName="password" required>
+          <input matInput type="password" placeholder="Password" formControlName="password" maxlength="40" required>
           <mat-error *ngIf="isFieldInvalid('userName')">
             Please complete your password
           </mat-error>

@@ -17,7 +17,8 @@ export class CustomerService {
   API_URL : string = environment.apiUrl + 'Customers';
 
   dataChange: BehaviorSubject<Customer[]> = new BehaviorSubject<Customer[]>([]);
-  dialogData: Customer;  
+  dialogData: Customer; 
+  listaTemporal : Customer[];
 
   constructor (private httpClient: HttpClient) {}
 
@@ -35,6 +36,17 @@ export class CustomerService {
       },
       (error: HttpErrorResponse) => {
           console.log (error.name + ' ' + error.message);
+
+          ////// rfv //////
+        this.listaTemporal = [
+          new Customer().setCustomerId(1).setFirstName('Marvin').setLastName('Fernandez').setIsActive('1').setRolId(1).setDocumentNumber('47288664').setCellphone('987654321'),
+          new Customer().setCustomerId(2).setFirstName('Jhonatan').setLastName('Tirado').setIsActive('1').setRolId(1).setDocumentNumber('12345678'),
+          new Customer().setCustomerId(3).setFirstName('Gustavo').setLastName('Osorio').setIsActive('0').setRolId(2).setDocumentNumber('87654321').setEmail('correo@ads.com'),
+          new Customer().setCustomerId(4).setFirstName('Richard').setLastName('Fernandez').setIsActive('1').setRolId(2).setDocumentNumber('11223344')          
+        ];      
+        this.dataChange.next(this.listaTemporal);
+        //////////////////////////////
+
       });
   }
 

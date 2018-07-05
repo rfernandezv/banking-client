@@ -44,10 +44,10 @@ export class AuthService {
 
                 ///////// rfv /////////
                 this.globals.customer = new Customer()
-                    .setRolId(1)
+                    .setCustomerId(1)
                     .setFirstName('Richar')
                     .setLastName('Fernandez')
-                    .setRolId(1)
+                    .setRolId(2)
                     .setUser('rfernandezv');
                 this.loggedIn.next(true);
                 this.router.navigate(['/dashboard']);

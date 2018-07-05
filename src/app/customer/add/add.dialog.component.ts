@@ -51,11 +51,16 @@ export class AddDialogComponent {
             .setIsActive('1')
             .setUser(this.data.user)
             .setPassword(this.data.password)
-            .setRolId(1)
+            .setRolId(2)
         ;
         this._customerService.addCustomer(this.requestCustomer).subscribe({
           error: (err: any) => {
             this._customerService.dialogData = null;
+
+            /////////////////// rfv //////////////////
+            this._customerService.dialogData = this.data;
+            ////////////////////////////////////////////////
+
               this._messageAlertHandleService.handleError(err);
           },
           complete: () => {

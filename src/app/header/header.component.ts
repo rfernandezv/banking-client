@@ -24,4 +24,8 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
   }
 
+  isRolAdmin() : boolean {
+      return (this.globals.customer.id_rol == 1);
+  }
+
 }

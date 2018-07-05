@@ -55,9 +55,16 @@ export class EditDialogComponent {
 
     this._customerService.updateCustomer(this.data.customerId, this.requestCustomer).subscribe({
       error: (err: any) => {
+          this._customerService.dialogData = null;
+
+          //////////////////// rfv ////////////////////
+          this._customerService.dialogData = this.data;
+          ////////////////////////////////////////////
+
           this._messageAlertHandleService.handleError(err);
       },
       complete: () => {
+          this._customerService.dialogData = this.data;
           this._messageAlertHandleService.handleSuccess('Updated successfully');       
       }
     });

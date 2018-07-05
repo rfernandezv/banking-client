@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule} from '@angular/common/http';
 import {
   MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule,
-  MatProgressSpinnerModule,
+  MatProgressSpinnerModule, 
   MatCheckboxModule, MatTableModule, MatToolbarModule, MAT_DIALOG_DATA, MatDialogRef
 } from '@angular/material';
 import { ToastModule } from 'ng2-toastr';
@@ -23,7 +23,6 @@ import { DeleteDialogComponent} from './customer/delete/delete.dialog.component'
 import { AddDialogBankComponent} from './bank-account/add/add.dialog.component';
 import { EditDialogBankComponent} from './bank-account/edit/edit.dialog.component';
 import { DeleteDialogBankComponent} from './bank-account/delete/delete.dialog.component';
-import { TransfersDialog } from './bank-account/transfer/transfer.component';
 import { TranferService} from './services/transfer.service';
 import { CustomerService} from './services/customer.service';
 import { BankAccountService} from './services/bank-account.service';
@@ -46,8 +45,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     DeleteDialogComponent,
     AddDialogBankComponent,
     EditDialogBankComponent,
-    DeleteDialogBankComponent,
-    TransfersDialog  
+    DeleteDialogBankComponent
   ],
   entryComponents: [
     AddDialogComponent,
@@ -55,8 +53,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     DeleteDialogComponent,
     AddDialogBankComponent,
     EditDialogBankComponent,
-    DeleteDialogBankComponent,
-    TransfersDialog
+    DeleteDialogBankComponent
   ],
   imports: [
     BrowserModule,

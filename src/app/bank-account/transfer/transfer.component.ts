@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ElementRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import { BankAccount } from '../../models/bank-account';
 import { Transfer } from '../../models/transfer';
 import { Router } from '@angular/router';
+import { Globals} from '../../shared/globals';
 import { Subscription } from 'rxjs/Subscription';
-import { ResponseService } from '../../models/response';
-import { Validators, FormBuilder, FormGroup} from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, FormControl} from '@angular/forms';
 import { TranferService } from '../../services/transfer.service';
+import { BankAccountService } from '../../services/bank-account.service';
 import { MessageAlertHandleService} from '../../services/message-alert.service';
-
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-transfer',
@@ -18,18 +19,10 @@ import { MessageAlertHandleService} from '../../services/message-alert.service';
 export class TransferComponent implements OnInit, OnDestroy {
   form: FormGroup;
   isSave: boolean = false;
-  responseAPI = new ResponseService();
-  errorMessage: String;
+  errorMessage: String;  
   subscription: Subscription = new Subscription();
   private formSubmitAttempt: boolean = false;
-
-  BankAccountsOrigin: BankAccount[] = [
-    new BankAccount().setId(1).setNumber('123-456-001').setBalance(1500).setIsLocked(false).setCustomerId(1)
-  ];
-
-  BankAccountsDestination: BankAccount[] = [
-    new BankAccount().setId(2).setNumber('123-456-002').setBalance(1800).setIsLocked(false).setCustomerId(2)
-  ];
+  BankAccountsOrigin: BankAccount[] = [];
 
   constructor(
       public fb: FormBuilder,
@@ -37,41 +30,60 @@ export class TransferComponent implements OnInit, OnDestroy {
       public dialogRef: MatDialogRef<TransferComponent>,
       @Inject(MAT_DIALOG_DATA) public data: Transfer,
       public _tranferService: TranferService,
+      public _bankAccountService : BankAccountService,
+      public globals : Globals,
       public _messageAlertHandleService: MessageAlertHandleService,
       private router: Router
   ) {}
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(TransfersDialog, {
-      width: '250px',
-      data: {name: this.responseAPI.message}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-    });
-  }
 
   ngOnInit() {
-    this.reset();   
-    this.form = this.fb.group({
-      fromAccountNumber: ['', Validators.required],
-      toAccountNumber: ['', Validators.required],
-      amount: ['', Validators.required]
-    });
+    this.reset();
+    this.setUpControls();
+    this.loadBankAccounts();
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
+  setUpControls() : void {
+      this.form = this.fb.group({
+        fromAccountNumber: new FormControl('', [Validators.required, Validators.maxLength(18)] ),
+        toAccountNumber: new FormControl('', [Validators.required, Validators.maxLength(18)] ),
+        amount: new FormControl('', [Validators.required, Validators.min(0)])
+      });
+  }
+  
+  loadBankAccounts() : void{
+      this._bankAccountService.getAllBankAccountByCustomerId(this.globals.customer.customerId).subscribe(
+        successData => {
+          this.BankAccountsOrigin = successData;
+        },
+        error => {
+          this._messageAlertHandleService.handleError("Failed to load resource bank account ");
+
+          //////////// rfv ////////////
+          this.BankAccountsOrigin = [
+            new BankAccount().setId(1).setNumber('123-456-001').setBalance(1500).setIsLocked(false).setCustomerId(1)
+          ];
+          ////////////////////////////////////////////////
+
+        },
+        () => {
+         // everything successful
+        }
+      );
+  }
+
   isFieldInvalid(field: string) {
-    if(this.isSave){
-      return false;
-    }
-    return (
-      (!this.form.get(field).valid && this.form.get(field).touched ) ||
-      (this.form.get(field).untouched && this.formSubmitAttempt)
-    );
+      if(this.isSave){
+        return false;
+      }
+      return (
+        (!this.form.get(field).valid && this.form.get(field).touched ) ||
+        (this.form.get(field).untouched && this.formSubmitAttempt)
+      );
   }
 
   onSubmit() {
@@ -97,29 +109,11 @@ export class TransferComponent implements OnInit, OnDestroy {
   }
 
   private reset() {
-    //this.data.fromAccountNumber = null;	 
+    this.data.fromAccountNumber = null;
     this.data.toAccountNumber = null;
     this.data.amount = null;    
   }
 
 }
 
-@Component({
-  selector: 'transfer-dialog',
-  templateUrl: 'transfer.dialog.html',
-})
-export class TransfersDialog {
-
-  constructor(
-    public dialogRef: MatDialogRef<TransfersDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
-
-export interface DialogData {
-  name: string;
-}
 

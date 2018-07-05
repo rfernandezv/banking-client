@@ -15,16 +15,16 @@
                   </mat-form-field>
 
                   <mat-form-field class="full-width-input">
-                      <input matInput placeholder="Bank Account Destination" [(ngModel)]="data.toAccountNumber" formControlName="toAccountNumber" required>
+                      <input matInput placeholder="Bank Account Destination" [(ngModel)]="data.toAccountNumber" formControlName="toAccountNumber" maxlength="18" required>
                       <mat-error *ngIf="isFieldInvalid('toAccountNumber')">
                           Please complete the destination account
                       </mat-error>
                   </mat-form-field>
 
                   <mat-form-field class="full-width-input" >
-                      <input matInput placeholder="Amount" type="number" [(ngModel)]="data.amount" class="custom-right-align" formControlName="amount" required>
+                      <input matInput placeholder="Amount" type="number" [(ngModel)]="data.amount" class="custom-right-align" formControlName="amount" maxlength="6" min="0" required>
                       <mat-error *ngIf="isFieldInvalid('amount')">
-                          Please complete the amount
+                          Please complete the amount correctly
                       </mat-error>
                       <span matPrefix>S/.&nbsp;</span>
                       <span matSuffix>.00</span>

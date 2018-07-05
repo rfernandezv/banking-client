@@ -31,7 +31,7 @@ export class BankAccountService {
   }
 
   getAllBankAccount(): void {
-    this.httpClient.get<BankAccount[]>(this.API_URL).subscribe(data => {
+    this.httpClient.get<BankAccount[]>(this.API_URL+'/bankAccount').subscribe(data => {
         this.dataChange.next(data);
       },
       (error: HttpErrorResponse) => {
@@ -46,6 +46,15 @@ export class BankAccountService {
         
           console.log (error.name + ' ' + error.message);
       });
+  }
+
+  getAllBankAccountByCustomerId (customerId : number): Observable<BankAccount[]> {
+    return this.httpClient
+            .get<BankAccount[]>(this.API_URL+'/getAccountIdCustomer/'+customerId, HttpOptionsConst)
+            .map(
+                res => res
+              )
+            .catch((error: any) => Observable.throw(error || 'Server error'));
   }
 
   addBankAccount (requestBankAccountDto: RequestBankAccountDto): Observable<ResponseService> {
