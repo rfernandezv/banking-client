@@ -25,8 +25,8 @@ export class ActivateDialogBankComponent {
     this.dialogRef.close('x');
   }
 
-  getDescriptionIsLocked(isLocked : boolean) : string{
-    return (isLocked)?'Yes':'No';
+  getDescriptionIsLocked(isLocked : string) : string{
+    return (isLocked == 'true')?'Yes':'No';
   }
 
   confirmActivate(): void {
@@ -38,7 +38,7 @@ export class ActivateDialogBankComponent {
         .setBalance(this.data.balance)
         .setCustomerId(this.data.customerId)
     ;
-    console.log('richar');
+
     this._bankAccountService.updateBankAccount(this.data.id, this.requestBankAccountDto).subscribe(
           successData => {              
             this.blockUI.stop();

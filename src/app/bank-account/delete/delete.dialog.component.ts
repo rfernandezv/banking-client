@@ -23,8 +23,8 @@ export class DeleteDialogBankComponent {
     this.dialogRef.close('x');
   }
 
-  getDescriptionIsLocked(isLocked : boolean) : string{
-    return (isLocked)?'Yes':'No';
+  getDescriptionIsLocked(isLocked : string) : string{
+    return (isLocked == 'true')?'Yes':'No';
   }
 
   confirmDelete(): void {
