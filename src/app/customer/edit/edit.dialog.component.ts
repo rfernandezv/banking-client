@@ -52,17 +52,17 @@ export class EditDialogComponent {
           .setBirthDate(this.globals.customer.birthDate)
           .setCellphone(this.data.cellphone)
           .setEmail(this.data.email)
-          .setIsActive(this.globals.customer.isActive)
-          .setUser(this.globals.customer.user)
-          .setPassword(this.globals.customer.password)
-          .setRolId(this.globals.customer.id_rol)
+          .setIsActive(this.data.isActive)
+          .setUser(this.data.user)
+          .setPassword(this.data.password)
+          .setRolId(this.data.id_rol)
       ;
 
     this._customerService.updateCustomer(this.data.id, this.requestCustomer).subscribe(
         successData => {              
             this.blockUI.stop();
-            
-            if(successData.response.httpStatus == '201'){
+            console.log(successData);
+            if(successData.response.httpStatus == '200'){
               this._customerService.dialogData = this.data;
               this._messageAlertHandleService.handleSuccess(successData.response.message);
             }else{

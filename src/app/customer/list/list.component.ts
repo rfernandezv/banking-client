@@ -61,12 +61,22 @@ export class ListComponent implements OnInit {
   }
 
 
-  startEdit(i: number, id: number, firstName: string, lastName: string, documentNumber: string, cellphone: string, email: string) {
-      this.id = id;
+  startEdit(i: number, customer : Customer) {
+      this.id = customer.id;
       this.index = i;
-      console.log(this.index);
       const dialogRef = this.dialog.open(EditDialogComponent, {
-        data: {id: id, firstName: firstName, lastName: lastName, documentNumber: documentNumber, cellphone: cellphone, email: email}
+        data: {id: customer.id, 
+               firstName: customer.firstName, 
+               lastName: customer.lastName, 
+               documentNumber: customer.documentNumber, 
+               cellphone: customer.cellphone, 
+               email: customer.email, 
+               user: customer.user, 
+               password: customer.password, 
+               isActive: customer.isActive,
+               id_rol: customer.id_rol, 
+               birthDate : customer.birthDate,
+               bankAccounts : customer.bankAccounts}
       });
 
       dialogRef.afterClosed().subscribe(result => {

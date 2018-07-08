@@ -30,8 +30,8 @@ export class DeleteDialogComponent {
       
         successData => {              
           this.blockUI.stop();
-          
-          if(successData.response.httpStatus == '201'){
+          console.log(successData);
+          if(successData.response.httpStatus == '200'){
             this._messageAlertHandleService.handleSuccess(successData.response.message);
           }else{
             this._customerService.dialogData = null;
