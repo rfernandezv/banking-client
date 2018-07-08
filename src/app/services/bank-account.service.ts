@@ -3,7 +3,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {BankAccount} from '../models/bank-account';
 import {RequestBankAccountDto} from '../models/dto/requestBankAccountDto';
-import {ResponseService} from '../models/response';
+import {ResponseApi} from '../models/dto/responseApi';
 import {HttpOptionsConst} from '../shared/http-options';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -11,6 +11,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
+import { ResponseAllBankAccountDto } from '../models/dto/responseAllBankAccountDto';
 
 @Injectable()
 export class BankAccountService {
@@ -31,19 +32,10 @@ export class BankAccountService {
   }
 
   getAllBankAccount(): void {
-    this.httpClient.get<BankAccount[]>(this.API_URL+'/bankAccount').subscribe(data => {
-        this.dataChange.next(data);
+    this.httpClient.get<ResponseAllBankAccountDto>(this.API_URL+'/bankAccount?offset=1&limit=20').subscribe(data => {
+        this.dataChange.next(data.content);
       },
       (error: HttpErrorResponse) => {
-
-        ////// rfv //////
-        this.listaTemporal = [
-          new BankAccount().setId(1).setNumber('123-001').setBalance(0).setCustomerId(1).setIsLocked(false),
-          new BankAccount().setId(2).setNumber('123-002').setBalance(1000).setCustomerId(2).setIsLocked(true)
-        ];      
-        this.dataChange.next(this.listaTemporal);
-        //////////////////////////////
-        
           console.log (error.name + ' ' + error.message);
       });
   }
@@ -57,7 +49,7 @@ export class BankAccountService {
             .catch((error: any) => Observable.throw(error || 'Server error'));
   }
 
-  addBankAccount (requestBankAccountDto: RequestBankAccountDto): Observable<ResponseService> {
+  addBankAccount (requestBankAccountDto: RequestBankAccountDto): Observable<ResponseApi> {
 
     return this.httpClient
             .post(this.API_URL, requestBankAccountDto,  HttpOptionsConst)
@@ -67,7 +59,7 @@ export class BankAccountService {
             .catch((error: any) => Observable.throw(error || 'Server error'));
   }
 
-  updateBankAccount (bankAccountId : number, requestBankAccountDto: RequestBankAccountDto): Observable<ResponseService> {
+  updateBankAccount (bankAccountId : number, requestBankAccountDto: RequestBankAccountDto): Observable<ResponseApi> {
     return this.httpClient
             .put(this.API_URL + '/'+ bankAccountId, requestBankAccountDto,  HttpOptionsConst)
             .map(
@@ -76,7 +68,7 @@ export class BankAccountService {
             .catch((error: any) => Observable.throw(error || 'Server error'));
   }
 
-  deleteBankAccount (bankAccountId: number): Observable<ResponseService> {
+  deleteBankAccount (bankAccountId: number): Observable<ResponseApi> {
     return this.httpClient
           .delete(this.API_URL + '/'+ bankAccountId, HttpOptionsConst)
           .map(

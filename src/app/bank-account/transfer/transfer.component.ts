@@ -56,19 +56,12 @@ export class TransferComponent implements OnInit, OnDestroy {
   }
   
   loadBankAccounts() : void{
-      this._bankAccountService.getAllBankAccountByCustomerId(this.globals.customer.customerId).subscribe(
+      this._bankAccountService.getAllBankAccountByCustomerId(this.globals.customer.id).subscribe(
         successData => {
           this.BankAccountsOrigin = successData;
         },
         error => {
           this._messageAlertHandleService.handleError("Failed to load resource bank account ");
-
-          //////////// rfv ////////////
-          this.BankAccountsOrigin = [
-            new BankAccount().setId(1).setNumber('123-456-001').setBalance(1500).setIsLocked(false).setCustomerId(1)
-          ];
-          ////////////////////////////////////////////////
-
         },
         () => {
          // everything successful

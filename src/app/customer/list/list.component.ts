@@ -23,7 +23,7 @@ import {DeleteDialogComponent} from '.././delete/delete.dialog.component';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  displayedColumns = ['customerId', 'firstName', 'lastName', 'documentNumber', 'cellphone', 'email', 'actions'];
+  displayedColumns = ['id', 'firstName', 'lastName', 'documentNumber', 'cellphone', 'email', 'actions'];
   customerDataBase: CustomerService | null;
   customerDataSource: CustomerDataSource | null;
   index: number;
@@ -61,17 +61,17 @@ export class ListComponent implements OnInit {
   }
 
 
-  startEdit(i: number, customerId: number, firstName: string, lastName: string, documentNumber: string, cellphone: string, email: string) {
-      this.id = customerId;
+  startEdit(i: number, id: number, firstName: string, lastName: string, documentNumber: string, cellphone: string, email: string) {
+      this.id = id;
       this.index = i;
       console.log(this.index);
       const dialogRef = this.dialog.open(EditDialogComponent, {
-        data: {customerId: customerId, firstName: firstName, lastName: lastName, documentNumber: documentNumber, cellphone: cellphone, email: email}
+        data: {id: id, firstName: firstName, lastName: lastName, documentNumber: documentNumber, cellphone: cellphone, email: email}
       });
 
       dialogRef.afterClosed().subscribe(result => {
         if (result === 1) {
-          const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.customerId === this.id);
+          const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.id === this.id);
           this.customerDataBase.dataChange.value[foundIndex] = this._CustomerService.getDialogData();
           this.refreshTable();
         }
@@ -79,16 +79,16 @@ export class ListComponent implements OnInit {
   }
 
 
-  deleteItem(i: number, customerId: number, firstName: string, lastName: string, documentNumber: string) {
+  deleteItem(i: number, id: number, firstName: string, lastName: string, documentNumber: string) {
       this.index = i;
-      this.id = customerId;
+      this.id = id;
       const dialogRef = this.dialog.open(DeleteDialogComponent, {
-        data: {customerId: customerId, firstName: firstName, lastName: lastName, documentNumber: documentNumber}
+        data: {id: id, firstName: firstName, lastName: lastName, documentNumber: documentNumber}
       });
 
       dialogRef.afterClosed().subscribe(result => {
         if (result === 1) {
-          const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.customerId === this.id);
+          const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.id === this.id);
           this.customerDataBase.dataChange.value.splice(foundIndex, 1);
           this.refreshTable();
         }
@@ -173,7 +173,7 @@ export class CustomerDataSource extends DataSource<Customer> {
 
         return Observable.merge(...displayDataChanges).map(() => {
           this.filteredData = this._customerDatabase.data.slice().filter((customer: Customer) => {
-            if(customer.customerId == undefined){
+            if(customer === undefined || customer.id === undefined){
               this.searchStr = '';
             }else{
               this.searchStr = (customer.firstName + customer.lastName + customer.documentNumber).toLowerCase();
@@ -186,8 +186,7 @@ export class CustomerDataSource extends DataSource<Customer> {
           const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
           this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
           return this.renderedData;
-        });
-      
+        });      
     }
 
 
@@ -204,7 +203,7 @@ export class CustomerDataSource extends DataSource<Customer> {
           let propertyB: number | string = '';
 
           switch (this._sort.active) {
-            case 'customerId': [propertyA, propertyB] = [a.customerId, b.customerId]; break;
+            case 'id': [propertyA, propertyB] = [a.id, b.id]; break;
             case 'firstName': [propertyA, propertyB] = [a.firstName, b.firstName]; break;
             case 'lastName': [propertyA, propertyB] = [a.lastName, b.lastName]; break;
             case 'documentNumber': [propertyA, propertyB] = [a.documentNumber, b.documentNumber]; break;

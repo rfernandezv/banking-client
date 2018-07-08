@@ -8,9 +8,9 @@
 
   <mat-table #table [dataSource]="customerDataSource" matSort class="mat-cell">
 
-    <ng-container matColumnDef="customerId">
+    <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-      <mat-cell *matCellDef="let row" >{{row.customerId}}</mat-cell>
+      <mat-cell *matCellDef="let row" >{{row.id}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="firstName">
@@ -47,11 +47,11 @@
       </mat-header-cell>
 
       <mat-cell *matCellDef="let row; let i=index;">
-        <button mat-icon-button color="accent" (click)="startEdit(i, row.customerId, row.firstName, row.lastName, row.documentNumber, row.cellphone, row.email)">
+        <button mat-icon-button color="accent" (click)="startEdit(i, row.id, row.firstName, row.lastName, row.documentNumber, row.cellphone, row.email)">
           <mat-icon aria-label="Edit">edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="accent" (click)="deleteItem(i, row.customerId, row.firstName, row.lastName, row.documentNumber)">
+        <button mat-icon-button color="accent" (click)="deleteItem(i, row.id, row.firstName, row.lastName, row.documentNumber)">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
       </mat-cell>

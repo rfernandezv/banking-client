@@ -5,15 +5,16 @@ import { User } from './user';
 import { Customer} from '../models/customer';
 import { Globals} from '../shared/globals';
 import { Observable} from 'rxjs/Observable';
-import { ResponseService} from '../models/response';
 import { HttpOptionsConst} from '../shared/http-options';
-import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { MessageAlertHandleService} from '../services/message-alert.service';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
+import { ResponseApi } from '../models/dto/responseApi';
+
 
 @Injectable()
 export class AuthService {
@@ -36,22 +37,11 @@ export class AuthService {
 
        this.authentication(user.userName, user.password).subscribe(
               successData => {
-                //successData.
-                this.globals.customer = successData;
+                this.globals.customer = successData.response.content;
+                this._messageAlertHandleService.handleSuccess(successData.response.message);
               },
               error => {
-                this._messageAlertHandleService.handleError("Your credentials are not correct, try again");
-
-                ///////// rfv /////////
-                this.globals.customer = new Customer()
-                    .setCustomerId(1)
-                    .setFirstName('Richar')
-                    .setLastName('Fernandez')
-                    .setRolId(2)
-                    .setUser('rfernandezv');
-                this.loggedIn.next(true);
-                this.router.navigate(['/dashboard']);
-                ///////////////////////////
+                this._messageAlertHandleService.handleError(error);                
               },
               () => {
                 this.loggedIn.next(true);
@@ -66,12 +56,12 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  authentication(username : string, password : string ): Observable<Customer> {
+  authentication(username : string, password : string ): Observable<ResponseApi> {
     return this.httpClient
-              .post(this.API_URL, { username: username, password: password},  HttpOptionsConst)
+              .post(this.API_URL, {user: username, password: password},  HttpOptionsConst)
               .map(
                 res => res
               )
-              .catch((error: any) => Observable.throw(error || 'Server error'));
+              .catch((error: any) => Observable.throw(error));
   }
 }

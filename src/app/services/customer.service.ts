@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {Customer} from '../models/customer';
+import {ResponseApi} from '../models/dto/responseApi';
 import {RequestCustomerDto} from '../models/dto/requestCustomerDto';
-import {ResponseService} from '../models/response';
 import {HttpOptionsConst} from '../shared/http-options';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -11,6 +11,7 @@ import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
+import { ResponseAllCustomersDto } from '../models/dto/responseAllCustomersDto';
 
 @Injectable()
 export class CustomerService {
@@ -31,47 +32,36 @@ export class CustomerService {
   }
 
   getAllCustomers(): void {
-    this.httpClient.get<Customer[]>(this.API_URL).subscribe(data => {
-        this.dataChange.next(data);        
+    this.httpClient.get<ResponseAllCustomersDto>(this.API_URL+'/customer?offset=1&limit=20').subscribe(data => {
+        this.dataChange.next(data.content);
       },
       (error: HttpErrorResponse) => {
           console.log (error.name + ' ' + error.message);
-
-          ////// rfv //////
-        this.listaTemporal = [
-          new Customer().setCustomerId(1).setFirstName('Marvin').setLastName('Fernandez').setIsActive('1').setRolId(1).setDocumentNumber('47288664').setCellphone('987654321'),
-          new Customer().setCustomerId(2).setFirstName('Jhonatan').setLastName('Tirado').setIsActive('1').setRolId(1).setDocumentNumber('12345678'),
-          new Customer().setCustomerId(3).setFirstName('Gustavo').setLastName('Osorio').setIsActive('0').setRolId(2).setDocumentNumber('87654321').setEmail('correo@ads.com'),
-          new Customer().setCustomerId(4).setFirstName('Richard').setLastName('Fernandez').setIsActive('1').setRolId(2).setDocumentNumber('11223344')          
-        ];      
-        this.dataChange.next(this.listaTemporal);
-        //////////////////////////////
-
-      });
+       });
   }
 
-  addCustomer (requestCustomerDto: RequestCustomerDto): Observable<ResponseService> {
 
+  addCustomer (requestCustomerDto: RequestCustomerDto): Observable<ResponseApi> {
     return this.httpClient
-            .post(this.API_URL, requestCustomerDto,  HttpOptionsConst)
+            .post(this.API_URL+'/customer', requestCustomerDto,  HttpOptionsConst)
             .map(
                 res => res
               )
             .catch((error: any) => Observable.throw(error || 'Server error'));
   }
 
-  updateCustomer (customerId : number, requestCustomerDto: RequestCustomerDto): Observable<ResponseService> {
+  updateCustomer (id : number, requestCustomerDto: RequestCustomerDto): Observable<ResponseApi> {
     return this.httpClient
-            .put(this.API_URL + '/'+ customerId, requestCustomerDto,  HttpOptionsConst)
+            .put(this.API_URL + '/customer/'+ id, requestCustomerDto,  HttpOptionsConst)
             .map(
                 res => res
               )
             .catch((error: any) => Observable.throw(error || 'Server error'));
   }
 
-  deleteCustomer (customerId: number): Observable<ResponseService> {
+  deleteCustomer (id: number): Observable<ResponseApi> {
     return this.httpClient
-          .delete(this.API_URL + '/'+ customerId, HttpOptionsConst)
+          .delete(this.API_URL + '/customer/'+ id, HttpOptionsConst)
           .map(
               res => res
             )

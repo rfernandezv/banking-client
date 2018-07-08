@@ -2,6 +2,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
 import {BankAccountService} from '../../services/bank-account.service';
 import {FormControl, Validators} from '@angular/forms';
+import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {Globals} from '../../shared/globals';
 import {BankAccount} from '../../models/bank-account';
 import {RequestBankAccountDto} from '../../models/dto/requestBankAccountDto';
@@ -15,6 +16,7 @@ import {MessageAlertHandleService} from '../../services/message-alert.service';
 
 
 export class AddDialogBankComponent {
+  @BlockUI() blockUI: NgBlockUI;
   requestBankAccountDto: RequestBankAccountDto;
 
   constructor(public dialogRef: MatDialogRef<AddDialogBankComponent>,
@@ -42,31 +44,37 @@ export class AddDialogBankComponent {
   }
 
   public confirmAdd(): void {    
-
+        
+        this.blockUI.start();
+        this.data.balance = 0;
         this.requestBankAccountDto = new RequestBankAccountDto()
             .setId(this.data.id)
             .setNumber(this.data.number)
             .setIsLocked(this.data.isLocked)
-            .setBalance(0)
-            .setCustomerId(this.globals.customer.customerId)
-        ;
-        this.data.balance = 0;
+            .setBalance(this.data.balance)
+            .setCustomerId(this.globals.customer.id)
+        ;        
+        this._bankAccountService.addBankAccount(this.requestBankAccountDto).subscribe(
 
-        this._bankAccountService.addBankAccount(this.requestBankAccountDto).subscribe({
-          error: (err: any) => {
-            this._bankAccountService.dialogData = null;
-
-            //////////// rfv  ////////////
-            this._bankAccountService.dialogData = this.data;
-            ////////////////////////
-
-              this._messageAlertHandleService.handleError(err);
+          successData => {              
+              this.blockUI.stop();
+              
+              if(successData.response.httpStatus == '201'){
+                this._bankAccountService.dialogData = this.data;
+                this._messageAlertHandleService.handleSuccess(successData.response.message);
+              }else{
+                this._bankAccountService.dialogData = null;
+                this._messageAlertHandleService.handleError(successData.response.message);
+              }
           },
-          complete: () => {
-              this._bankAccountService.dialogData = this.data;
-              this._messageAlertHandleService.handleSuccess('Registered successfully');       
-          }
-        });
+          error => {
+              this._bankAccountService.dialogData = null;
+              this.blockUI.stop();
+              this._messageAlertHandleService.handleError(error);
+          },
+          () => {}
+
+      );
 
   }
 }

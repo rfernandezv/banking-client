@@ -2,7 +2,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
 import {CustomerService} from '../../services/customer.service';
 import {Customer} from '../../models/customer';
+import {Globals} from '../../shared/globals';
 import {FormControl, Validators} from '@angular/forms';
+import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {RequestCustomerDto} from '../../models/dto/requestCustomerDto';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
 
@@ -13,10 +15,12 @@ import {MessageAlertHandleService} from '../../services/message-alert.service';
   styleUrls: ['./edit.dialog.css']
 })
 export class EditDialogComponent {
+  @BlockUI() blockUI: NgBlockUI;
   requestCustomer: RequestCustomerDto;
 
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: Customer, 
+              @Inject(MAT_DIALOG_DATA) public data: Customer,
+              public globals : Globals,
               public _messageAlertHandleService: MessageAlertHandleService,
               public _customerService: CustomerService) { }
 
@@ -40,33 +44,38 @@ export class EditDialogComponent {
   }
 
   confirmEdit(): void {
-    this.requestCustomer = new RequestCustomerDto()
-        .setFirstName(this.data.firstName)
-        .setLastName(this.data.lastName)
-        .setDocumentNumber(this.data.documentNumber)
-        .setBirthDate(this.data.birthDate)
-        .setCellphone(this.data.cellphone)
-        .setEmail(this.data.email)
-        .setIsActive(this.data.isActive)
-        .setUser(this.data.user)
-        .setPassword(this.data.password)
-        .setRolId(this.data.id_rol)
-    ;
+      this.blockUI.start();
+      this.requestCustomer = new RequestCustomerDto()
+          .setFirstName(this.data.firstName)
+          .setLastName(this.data.lastName)
+          .setDocumentNumber(this.data.documentNumber)
+          .setBirthDate(this.globals.customer.birthDate)
+          .setCellphone(this.data.cellphone)
+          .setEmail(this.data.email)
+          .setIsActive(this.globals.customer.isActive)
+          .setUser(this.globals.customer.user)
+          .setPassword(this.globals.customer.password)
+          .setRolId(this.globals.customer.id_rol)
+      ;
 
-    this._customerService.updateCustomer(this.data.customerId, this.requestCustomer).subscribe({
-      error: (err: any) => {
-          this._customerService.dialogData = null;
-
-          //////////////////// rfv ////////////////////
-          this._customerService.dialogData = this.data;
-          ////////////////////////////////////////////
-
-          this._messageAlertHandleService.handleError(err);
-      },
-      complete: () => {
-          this._customerService.dialogData = this.data;
-          this._messageAlertHandleService.handleSuccess('Updated successfully');       
-      }
-    });
+    this._customerService.updateCustomer(this.data.id, this.requestCustomer).subscribe(
+        successData => {              
+            this.blockUI.stop();
+            
+            if(successData.response.httpStatus == '201'){
+              this._customerService.dialogData = this.data;
+              this._messageAlertHandleService.handleSuccess(successData.response.message);
+            }else{
+              this._customerService.dialogData = null;
+              this._messageAlertHandleService.handleError(successData.response.message);
+            }
+        },
+        error => {
+            this._customerService.dialogData = null;
+          this.blockUI.stop();
+          this._messageAlertHandleService.handleError(error);
+        },
+        () => {}
+    );
   }
 }

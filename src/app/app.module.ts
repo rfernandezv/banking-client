@@ -4,10 +4,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule} from '@angular/common/http';
 import {
   MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule,
-  MatProgressSpinnerModule, 
+  MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule,
   MatCheckboxModule, MatTableModule, MatToolbarModule, MAT_DIALOG_DATA, MatDialogRef
 } from '@angular/material';
 import { ToastModule } from 'ng2-toastr';
+import { BlockUIModule } from 'ng-block-ui';
 import { AppMaterialModule } from './app-material/app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -65,6 +66,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     ToastModule.forRoot(),
+    BlockUIModule.forRoot(
+      {
+        message: 'Please wait...'
+      }
+    ),
 
     MatDialogModule,
     MatButtonModule,
@@ -75,7 +81,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MatToolbarModule,
     MatPaginatorModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
+  exports: [
+    MatDatepickerModule
   ],
   providers: [
     AuthService, AuthGuard, TranferService, CustomerService, BankAccountService, MessageAlertHandleService, Globals,

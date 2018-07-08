@@ -1,5 +1,7 @@
+import { BankAccount } from "./bank-account";
+
 export class Customer {
-    customerId: number;
+    id: number;
     firstName: string;
     lastName: string;
     birthDate : string;
@@ -10,11 +12,12 @@ export class Customer {
     user : string;
     password : string;
     id_rol : number;
+    bankAccounts : BankAccount[];
 
     constructor() {}
 
-    public setCustomerId(value: number): Customer {
-        this.customerId = value;
+    public setId(value: number): Customer {
+        this.id = value;
         return this;
     }
 

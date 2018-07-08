@@ -2,6 +2,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
 import {Customer} from '../../models/customer';
 import {CustomerService} from '../../services/customer.service';
+import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
 
 
@@ -11,6 +12,7 @@ import {MessageAlertHandleService} from '../../services/message-alert.service';
   styleUrls: ['./delete.dialog.css']
 })
 export class DeleteDialogComponent {
+  @BlockUI() blockUI: NgBlockUI;
 
   constructor(public dialogRef: MatDialogRef<DeleteDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Customer, 
@@ -22,13 +24,25 @@ export class DeleteDialogComponent {
   }
 
   confirmDelete(): void {
-    this._customerService.deleteCustomer(this.data.customerId).subscribe({
-      error: (err: any) => {
-          this._messageAlertHandleService.handleError(err);
+    this.blockUI.start();
+
+    this._customerService.deleteCustomer(this.data.id).subscribe(
+      
+        successData => {              
+          this.blockUI.stop();
+          
+          if(successData.response.httpStatus == '201'){
+            this._messageAlertHandleService.handleSuccess(successData.response.message);
+          }else{
+            this._customerService.dialogData = null;
+            this._messageAlertHandleService.handleError(successData.response.message);
+          }
       },
-      complete: () => {
-          this._messageAlertHandleService.handleSuccess('Deleted successfully');       
-      }
-    });
+      error => {
+          this.blockUI.stop();
+          this._messageAlertHandleService.handleError(error);
+      },
+      () => {}
+    );
   }
 }

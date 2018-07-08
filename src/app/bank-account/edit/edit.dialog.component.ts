@@ -47,7 +47,7 @@ export class EditDialogBankComponent {
         .setNumber(this.data.number)
         .setIsLocked(this.data.isLocked)
         .setBalance(this.data.balance)
-        .setCustomerId(this.globals.customer.customerId)
+        .setCustomerId(this.globals.customer.id)
     ;
 
     this._bankAccountService.updateBankAccount(this.data.id, this.requestBankAccountDto).subscribe({

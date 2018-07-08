@@ -1,5 +1,6 @@
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
+import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {CustomerService} from '../../services/customer.service';
 import {FormControl, Validators} from '@angular/forms';
 import {Customer} from '../../models/customer';
@@ -14,7 +15,9 @@ import {MessageAlertHandleService} from '../../services/message-alert.service';
 
 
 export class AddDialogComponent {
-  requestCustomer: RequestCustomerDto;
+  @BlockUI() blockUI: NgBlockUI;
+  requestCustomer: RequestCustomerDto; 
+  date = new Date();
 
   constructor(public dialogRef: MatDialogRef<AddDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Customer,
@@ -40,33 +43,44 @@ export class AddDialogComponent {
   }
 
   public confirmAdd(): void {    
+        var birthDate = '';
 
+        this.blockUI.start();
+        if(this.date != null){
+          birthDate = this.date.getFullYear() + '-'+ this.date.getMonth() + '-'+this.date.getDay();
+        }        
         this.requestCustomer = new RequestCustomerDto()
             .setFirstName(this.data.firstName)
             .setLastName(this.data.lastName)
             .setDocumentNumber(this.data.documentNumber)
-            .setBirthDate(this.data.birthDate)
+            .setBirthDate(birthDate)
             .setCellphone(this.data.cellphone)
             .setEmail(this.data.email)
-            .setIsActive('1')
+            .setIsActive('true')
             .setUser(this.data.user)
             .setPassword(this.data.password)
             .setRolId(2)
         ;
-        this._customerService.addCustomer(this.requestCustomer).subscribe({
-          error: (err: any) => {
-            this._customerService.dialogData = null;
+        
+        this._customerService.addCustomer(this.requestCustomer).subscribe(
 
-            /////////////////// rfv //////////////////
-            this._customerService.dialogData = this.data;
-            ////////////////////////////////////////////////
-
-              this._messageAlertHandleService.handleError(err);
+          successData => {              
+              this.blockUI.stop();
+              
+              if(successData.response.httpStatus == '201'){
+                this._customerService.dialogData = this.data;
+                this._messageAlertHandleService.handleSuccess(successData.response.message);
+              }else{
+                this._customerService.dialogData = null;
+                this._messageAlertHandleService.handleError(successData.response.message);
+              }
           },
-          complete: () => {
-              this._customerService.dialogData = this.data;
-              this._messageAlertHandleService.handleSuccess('Registered successfully');       
-          }
-        });
+          error => {
+              this._customerService.dialogData = null;
+              this.blockUI.stop();
+              this._messageAlertHandleService.handleError(error);
+          },
+          () => {}
+      );
   }
 }

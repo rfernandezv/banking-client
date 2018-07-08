@@ -1,6 +1,9 @@
-export class ResponseService {
+import { Customer } from "./customer";
+
+export class Response {
     httpStatus: string;
-    message: string; 
+    message: string;
+    content: Customer;
     errors: Error[];
 }
 
