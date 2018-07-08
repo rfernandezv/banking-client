@@ -66,16 +66,17 @@ export class EditDialogComponent {
               this._customerService.dialogData = this.data;
               this._messageAlertHandleService.handleSuccess(successData.response.message);
             }else{
-              this._customerService.dialogData = null;
+              this._customerService.dialogData = null;              
               this._messageAlertHandleService.handleError(successData.response.message);
             }
         },
         error => {
             this._customerService.dialogData = null;
-          this.blockUI.stop();
-          this._messageAlertHandleService.handleError(error);
+            this.blockUI.stop();
+            this._messageAlertHandleService.handleError(error);
         },
         () => {}
     );
+    
   }
 }

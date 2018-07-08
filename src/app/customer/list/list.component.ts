@@ -71,9 +71,11 @@ export class ListComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result === 1) {
-          const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.id === this.id);
-          this.customerDataBase.dataChange.value[foundIndex] = this._CustomerService.getDialogData();
-          this.refreshTable();
+            if(this._CustomerService.getDialogData() != null){
+              const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.id === this.id);
+              this.customerDataBase.dataChange.value[foundIndex] = this._CustomerService.getDialogData();
+              this.refreshTable();
+            }          
         }
       });
   }
