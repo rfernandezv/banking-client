@@ -72,6 +72,7 @@ export class AddDialogComponent {
                 this._messageAlertHandleService.handleSuccess(successData.response.message);
               }else{
                 this._customerService.dialogData = null;
+                this._customerService.dialogData = this.data;   //rfv
                 this._messageAlertHandleService.handleError(successData.response.message);
               }
           },
