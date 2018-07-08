@@ -19,7 +19,6 @@ export class CustomerService {
 
   dataChange: BehaviorSubject<Customer[]> = new BehaviorSubject<Customer[]>([]);
   dialogData: Customer; 
-  listaTemporal : Customer[];
 
   constructor (private httpClient: HttpClient) {}
 

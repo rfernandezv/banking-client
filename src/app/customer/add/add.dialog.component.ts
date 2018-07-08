@@ -39,7 +39,7 @@ export class AddDialogComponent {
   }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close('x');
   }
 
   public confirmAdd(): void {    
@@ -70,6 +70,7 @@ export class AddDialogComponent {
               if(successData.response.httpStatus == '201'){
                 this._customerService.dialogData = this.data;
                 this._messageAlertHandleService.handleSuccess(successData.response.message);
+                this.dialogRef.close(1);
               }else{
                 this._customerService.dialogData = null;
                 this._messageAlertHandleService.handleError(successData.response.message);

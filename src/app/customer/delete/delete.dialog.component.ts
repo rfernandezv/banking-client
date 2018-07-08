@@ -20,25 +20,28 @@ export class DeleteDialogComponent {
               public _customerService: CustomerService) { }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close('x');
   }
 
   confirmDelete(): void {
     this.blockUI.start();
 
-    this._customerService.deleteCustomer(this.data.id).subscribe(
-      
-        successData => {              
+    this._customerService.deleteCustomer(this.data.id).subscribe(      
+        successData => {
           this.blockUI.stop();
-          console.log(successData);
+
           if(successData.response.httpStatus == '200'){
-            this._messageAlertHandleService.handleSuccess(successData.response.message);
+              this.data.isActive = 'false';
+              this._customerService.dialogData = this.data;
+              this._messageAlertHandleService.handleSuccess(successData.response.message);
+              this.dialogRef.close(1);
           }else{
             this._customerService.dialogData = null;
             this._messageAlertHandleService.handleError(successData.response.message);
           }
       },
-      error => {
+      error => {          
+          this._customerService.dialogData = null;
           this.blockUI.stop();
           this._messageAlertHandleService.handleError(error);
       },

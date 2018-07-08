@@ -15,6 +15,7 @@ import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AddDialogComponent} from '.././add/add.dialog.component';
 import {EditDialogComponent} from '.././edit/edit.dialog.component';
 import {DeleteDialogComponent} from '.././delete/delete.dialog.component';
+import {ActivateDialogComponent} from '.././activate/activate.dialog.component';
 
 
 @Component({
@@ -23,7 +24,7 @@ import {DeleteDialogComponent} from '.././delete/delete.dialog.component';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
-  displayedColumns = ['id', 'firstName', 'lastName', 'documentNumber', 'cellphone', 'email', 'actions'];
+  displayedColumns = ['id', 'firstName', 'lastName', 'documentNumber', 'cellphone', 'email', 'isActive', 'actions'];
   customerDataBase: CustomerService | null;
   customerDataSource: CustomerDataSource | null;
   index: number;
@@ -43,6 +44,10 @@ export class ListComponent implements OnInit {
 
   refresh() {
     this.loadData();
+  }
+
+  getDescriptionIsActive(isActive : boolean) : string{
+    return (isActive)?'Yes':'No';
   }
 
   addNew(customer: Customer) {
@@ -82,7 +87,7 @@ export class ListComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         if (result === 1) {
             if(this._CustomerService.getDialogData() != null){
-              const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.id === this.id);
+              const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.id === this.id);              
               this.customerDataBase.dataChange.value[foundIndex] = this._CustomerService.getDialogData();
               this.refreshTable();
             }          
@@ -91,18 +96,60 @@ export class ListComponent implements OnInit {
   }
 
 
-  deleteItem(i: number, id: number, firstName: string, lastName: string, documentNumber: string) {
+  deleteItem(i: number, customer : Customer) {
+      this.id = customer.id;
       this.index = i;
-      this.id = id;
       const dialogRef = this.dialog.open(DeleteDialogComponent, {
-        data: {id: id, firstName: firstName, lastName: lastName, documentNumber: documentNumber}
+        data: {id: customer.id, 
+              firstName: customer.firstName, 
+              lastName: customer.lastName, 
+              documentNumber: customer.documentNumber, 
+              cellphone: customer.cellphone, 
+              email: customer.email, 
+              user: customer.user, 
+              password: customer.password, 
+              isActive: customer.isActive,
+              id_rol: customer.id_rol, 
+              birthDate : customer.birthDate,
+              bankAccounts : customer.bankAccounts}
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        if (result === 1) {
-          const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.id === this.id);
-          this.customerDataBase.dataChange.value.splice(foundIndex, 1);
-          this.refreshTable();
+        if (result === 1) {            
+            if(this._CustomerService.getDialogData() != null){
+              const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.id === this.id);
+              this.customerDataBase.dataChange.value[foundIndex] = this._CustomerService.getDialogData();
+              this.refreshTable();
+            }          
+        }
+      });
+  }
+
+  activateItem(i: number, customer : Customer) {
+      this.id = customer.id;
+      this.index = i;
+      const dialogRef = this.dialog.open(ActivateDialogComponent, {
+        data: {id: customer.id, 
+              firstName: customer.firstName, 
+              lastName: customer.lastName, 
+              documentNumber: customer.documentNumber, 
+              cellphone: customer.cellphone, 
+              email: customer.email, 
+              user: customer.user, 
+              password: customer.password, 
+              isActive: customer.isActive,
+              id_rol: customer.id_rol, 
+              birthDate : customer.birthDate,
+              bankAccounts : customer.bankAccounts}
+      });
+      
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {            
+            if(this._CustomerService.getDialogData() != null){
+              const foundIndex = this.customerDataBase.dataChange.value.findIndex(x => x.id === this.id);
+              this.customerDataBase.dataChange.value[foundIndex] = this._CustomerService.getDialogData();
+              this.refreshTable();
+            }          
         }
       });
   }
@@ -221,6 +268,7 @@ export class CustomerDataSource extends DataSource<Customer> {
             case 'documentNumber': [propertyA, propertyB] = [a.documentNumber, b.documentNumber]; break;
             case 'cellphone': [propertyA, propertyB] = [a.cellphone, b.cellphone]; break;
             case 'email': [propertyA, propertyB] = [a.email, b.email]; break;
+            case 'isActive': [propertyA, propertyB] = [a.isActive, b.isActive]; break;            
           }
 
           const valueA = isNaN(+propertyA) ? propertyA : +propertyA;

@@ -21,9 +21,11 @@ import { CurrentOptionComponent } from './current-option/current-option.componen
 import { AddDialogComponent} from './customer/add/add.dialog.component';
 import { EditDialogComponent} from './customer/edit/edit.dialog.component';
 import { DeleteDialogComponent} from './customer/delete/delete.dialog.component';
+import { ActivateDialogComponent} from './customer/activate/activate.dialog.component';
 import { AddDialogBankComponent} from './bank-account/add/add.dialog.component';
 import { EditDialogBankComponent} from './bank-account/edit/edit.dialog.component';
 import { DeleteDialogBankComponent} from './bank-account/delete/delete.dialog.component';
+import { ActivateDialogBankComponent} from './bank-account/activate/activate.dialog.component';
 import { TranferService} from './services/transfer.service';
 import { CustomerService} from './services/customer.service';
 import { BankAccountService} from './services/bank-account.service';
@@ -44,17 +46,21 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     AddDialogComponent,
     EditDialogComponent,
     DeleteDialogComponent,
+    ActivateDialogComponent,
     AddDialogBankComponent,
     EditDialogBankComponent,
-    DeleteDialogBankComponent
+    DeleteDialogBankComponent,
+    ActivateDialogBankComponent
   ],
   entryComponents: [
     AddDialogComponent,
     EditDialogComponent,
     DeleteDialogComponent,
+    ActivateDialogComponent,
     AddDialogBankComponent,
     EditDialogBankComponent,
-    DeleteDialogBankComponent
+    DeleteDialogBankComponent,
+    ActivateDialogBankComponent
   ],
   imports: [
     BrowserModule,

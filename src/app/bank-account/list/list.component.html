@@ -37,12 +37,16 @@
       </mat-header-cell>
 
       <mat-cell *matCellDef="let row; let i=index;">
-        <button mat-icon-button color="accent" (click)="startEdit(i, row.id, row.number, row.isLocked, row.balance)">
+        <button mat-icon-button color="accent" (click)="startEdit(i, row)" *ngIf="!row.isLocked">
           <mat-icon aria-label="Edit">edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="accent" (click)="deleteItem(i, row.id, row.number, row.isLocked, row.balance)">
+        <button mat-icon-button color="accent" (click)="deleteItem(i, row)" *ngIf="!row.isLocked">
           <mat-icon aria-label="Delete">delete</mat-icon>
+        </button>
+
+        <button mat-icon-button color="accent" (click)="activateItem(i, row)" *ngIf="row.isLocked" >
+          <mat-icon aria-label="Activate">check_circle</mat-icon>
         </button>
       </mat-cell>
     </ng-container>

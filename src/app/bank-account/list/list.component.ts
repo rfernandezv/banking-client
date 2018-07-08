@@ -3,6 +3,7 @@ import {BankAccountService} from '../../services/bank-account.service';
 import {HttpClient} from '@angular/common/http';
 import {MatDialog, MatPaginator, MatSort} from '@angular/material';
 import {BankAccount} from '../.././models/bank-account';
+import {Globals} from '../../shared/globals';
 import {Observable } from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {DataSource} from '@angular/cdk/collections';
@@ -15,6 +16,7 @@ import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {AddDialogBankComponent} from '../add/add.dialog.component';
 import {EditDialogBankComponent} from '../edit/edit.dialog.component';
 import {DeleteDialogBankComponent} from '../delete/delete.dialog.component';
+import {ActivateDialogBankComponent} from '../activate/activate.dialog.component';
 
 @Component({
   selector: 'app-list',
@@ -30,6 +32,7 @@ export class ListComponent implements OnInit {
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
+              public globals : Globals,
               public _bankAccountService: BankAccountService
   ) {}
 
@@ -64,40 +67,76 @@ export class ListComponent implements OnInit {
     });
 }
 
-startEdit(i: number, id: number, number: string, isLocked: boolean, balance: number) {
-    this.id = id;
+startEdit(i: number, bankAccount : BankAccount) {
     this.index = i;
-    console.log(this.index);
+    this.id = bankAccount.id;
     const dialogRef = this.dialog.open(EditDialogBankComponent, {
-      data: {id: id, number: number, isLocked: isLocked, balance : balance}
+      data: {id: bankAccount.id, 
+            number: bankAccount.number, 
+            isLocked: bankAccount.isLocked, 
+            balance : bankAccount.balance,
+            customerId : bankAccount.customerId            
+          }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-        const foundIndex = this.bankAccountDataBase.dataChange.value.findIndex(x => x.id === this.id);
-        this.bankAccountDataBase.dataChange.value[foundIndex] = this._bankAccountService.getDialogData();
-        this.refreshTable();
+        if(this._bankAccountService.getDialogData() != null){
+            const foundIndex = this.bankAccountDataBase.dataChange.value.findIndex(x => x.id === this.id);
+            this.bankAccountDataBase.dataChange.value[foundIndex] = this._bankAccountService.getDialogData();
+            this.refreshTable();
+        }        
       }
     });
 }
 
 
-deleteItem(i: number, id: number, number: string, isLocked: boolean, balance: number) {
+deleteItem(i: number, bankAccount : BankAccount) {
     this.index = i;
-    this.id = id;
+    this.id = bankAccount.id;
     const dialogRef = this.dialog.open(DeleteDialogBankComponent, {
-      data: {id: id, number: number, isLocked: isLocked, balance : balance}
+      data: {id: bankAccount.id, 
+            number: bankAccount.number, 
+            isLocked: bankAccount.isLocked, 
+            balance : bankAccount.balance,
+            customerId : bankAccount.customerId            
+          }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-        const foundIndex = this.bankAccountDataBase.dataChange.value.findIndex(x => x.id === this.id);
-        this.bankAccountDataBase.dataChange.value.splice(foundIndex, 1);
-        this.refreshTable();
+        if(this._bankAccountService.getDialogData() != null){
+            const foundIndex = this.bankAccountDataBase.dataChange.value.findIndex(x => x.id === this.id);
+            this.bankAccountDataBase.dataChange.value[foundIndex] = this._bankAccountService.getDialogData();
+            this.refreshTable();
+        }        
       }
     });
 }
 
+
+activateItem(i: number, bankAccount : BankAccount) {
+  this.index = i;
+  this.id = bankAccount.id;
+  const dialogRef = this.dialog.open(ActivateDialogBankComponent, {
+    data: {id: bankAccount.id, 
+          number: bankAccount.number, 
+          isLocked: bankAccount.isLocked, 
+          balance : bankAccount.balance,
+          customerId : bankAccount.customerId            
+        }
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result === 1) {
+      if(this._bankAccountService.getDialogData() != null){
+          const foundIndex = this.bankAccountDataBase.dataChange.value.findIndex(x => x.id === this.id);
+          this.bankAccountDataBase.dataChange.value[foundIndex] = this._bankAccountService.getDialogData();
+          this.refreshTable();
+      }        
+    }
+  });
+}
 
 private refreshTable() {
     if (this.bankAccountDataSource._paginator.hasNextPage()) {
@@ -115,7 +154,7 @@ private refreshTable() {
 
 public loadData() {
   this.bankAccountDataBase = new BankAccountService(this.httpClient);
-  this.bankAccountDataSource = new BankAccountDataSource(this.bankAccountDataBase, this.paginator, this.sort);
+  this.bankAccountDataSource = new BankAccountDataSource(this.bankAccountDataBase, this.paginator, this.globals, this.sort);
 
   Observable.fromEvent(this.filter.nativeElement, 'keyup')
       .debounceTime(150)
@@ -147,9 +186,13 @@ export class BankAccountDataSource extends DataSource<BankAccount> {
 
   constructor(public _bankAccountDatabase: BankAccountService,
               public _paginator: MatPaginator,
+              public globals : Globals,
               public _sort: MatSort) {
     super();
-    this._filterChange.subscribe(() => this._paginator.pageIndex = 0);
+
+    if(this._filterChange != undefined){
+      this._filterChange.subscribe(() => this._paginator.pageIndex = 0);
+    }
   }
 
   connect(): Observable<BankAccount[]> {
@@ -160,35 +203,35 @@ export class BankAccountDataSource extends DataSource<BankAccount> {
           this._paginator.page
         ];
 
-        this._bankAccountDatabase.getAllBankAccount();
+        this._bankAccountDatabase.getAllBankAccountByCustomerIdView(this.globals.customer.id);
+        
+            this.filteredData = this._bankAccountDatabase.data.slice().filter((bankAccount : BankAccount) => {
+              const searchStr = (bankAccount.number).toLowerCase();
+              return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+            });
 
-        this.filteredData = this._bankAccountDatabase.data.slice().filter((bankAccount : BankAccount) => {
-          const searchStr = (bankAccount.number).toLowerCase();
-          return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-        });
+            const sortedData = this.sortData(this.filteredData.slice());
 
-        const sortedData = this.sortData(this.filteredData.slice());
+            const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+            this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
 
-        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-        this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
+            return Observable.merge(...displayDataChanges).map(() => {
+              this.filteredData = this._bankAccountDatabase.data.slice().filter((bankAccount : BankAccount) => {
+                if(bankAccount == undefined || bankAccount.id == undefined){
+                  this.searchStr = '';
+                }else{
+                  this.searchStr = (bankAccount.number).toLowerCase();
+                }            
+                return this.searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+              });
 
-        return Observable.merge(...displayDataChanges).map(() => {
-          this.filteredData = this._bankAccountDatabase.data.slice().filter((bankAccount : BankAccount) => {
-            if(bankAccount == undefined || bankAccount.id == undefined){
-              this.searchStr = '';
-            }else{
-              this.searchStr = (bankAccount.number).toLowerCase();
-            }            
-            return this.searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-          });
+              const sortedData = this.sortData(this.filteredData.slice());
 
-          const sortedData = this.sortData(this.filteredData.slice());
-
-          const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
-          this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
-          return this.renderedData;
-        });
-      
+              const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+              this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
+              return this.renderedData;
+            });
+     
     }
 
     disconnect() {
@@ -209,7 +252,7 @@ export class BankAccountDataSource extends DataSource<BankAccount> {
             case 'id': [propertyA, propertyB] = [a.id, b.id]; break;
             case 'number': [propertyA, propertyB] = [a.number, b.number]; break;
             case 'balance': [propertyA, propertyB] = [a.balance, b.balance]; break;
-            case 'isLocked': [propertyC, propertyD] = [a.isLocked, b.isLocked]; break;
+            case 'isLocked': [propertyA, propertyB] = [a.isLocked, b.isLocked]; break;
             case 'customerId': [propertyA, propertyB] = [a.customerId, b.customerId]; break;
           }
 

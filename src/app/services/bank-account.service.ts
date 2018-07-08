@@ -19,7 +19,6 @@ export class BankAccountService {
 
   dataChange: BehaviorSubject<BankAccount[]> = new BehaviorSubject<BankAccount[]>([]);
   dialogData: BankAccount;
-  listaTemporal : BankAccount[];
 
   constructor (private httpClient: HttpClient) {}
 
@@ -40,9 +39,19 @@ export class BankAccountService {
       });
   }
 
+  getAllBankAccountByCustomerIdView(customerId : number): void {
+     this.httpClient
+            .get<BankAccount[]>(this.API_URL+'/customer/'+customerId, HttpOptionsConst).subscribe(data => {
+              this.dataChange.next(data);
+            },
+            (error: HttpErrorResponse) => {
+               // console.log (error.name + ' ' + error.message);
+            });
+  }
+
   getAllBankAccountByCustomerId (customerId : number): Observable<BankAccount[]> {
     return this.httpClient
-            .get<BankAccount[]>(this.API_URL+'/getAccountIdCustomer/'+customerId, HttpOptionsConst)
+            .get<BankAccount[]>(this.API_URL+'/customer/'+customerId, HttpOptionsConst)
             .map(
                 res => res
               )
@@ -52,7 +61,7 @@ export class BankAccountService {
   addBankAccount (requestBankAccountDto: RequestBankAccountDto): Observable<ResponseApi> {
 
     return this.httpClient
-            .post(this.API_URL, requestBankAccountDto,  HttpOptionsConst)
+            .post(this.API_URL+'/bankAccount', requestBankAccountDto,  HttpOptionsConst)
             .map(
                 res => res
               )
@@ -61,7 +70,7 @@ export class BankAccountService {
 
   updateBankAccount (bankAccountId : number, requestBankAccountDto: RequestBankAccountDto): Observable<ResponseApi> {
     return this.httpClient
-            .put(this.API_URL + '/'+ bankAccountId, requestBankAccountDto,  HttpOptionsConst)
+            .put(this.API_URL +'/bankAccount/'+ bankAccountId, requestBankAccountDto,  HttpOptionsConst)
             .map(
                 res => res
               )
@@ -70,7 +79,7 @@ export class BankAccountService {
 
   deleteBankAccount (bankAccountId: number): Observable<ResponseApi> {
     return this.httpClient
-          .delete(this.API_URL + '/'+ bankAccountId, HttpOptionsConst)
+          .delete(this.API_URL + '/bankAccount/'+ bankAccountId, HttpOptionsConst)
           .map(
               res => res
             )

@@ -9,13 +9,9 @@
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>
-    
-    <div class="form">
-        <mat-checkbox  class="form-control" placeholder="Is Locked?" [(ngModel)]="data.isLocked" name="isLocked" >Is Locked?</mat-checkbox>
-    </div>
 
     <div mat-dialog-actions>
-      <button mat-button [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="confirmEdit()">Save</button>
+      <button mat-button [type]="submit" [disabled]="!formControl.valid" (click)="confirmEdit()">Save</button>
       <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>
     </div>
   </form>

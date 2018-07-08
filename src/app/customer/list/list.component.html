@@ -8,8 +8,8 @@
 
   <mat-table #table [dataSource]="customerDataSource" matSort class="mat-cell">
 
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+    <ng-container matColumnDef="id" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header   >Id</mat-header-cell>
       <mat-cell *matCellDef="let row" >{{row.id}}</mat-cell>
     </ng-container>
 
@@ -38,6 +38,11 @@
       <mat-cell *matCellDef="let row"> {{row.email}}</mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="isActive">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Is Active?</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{getDescriptionIsActive(row.isActive)}}</mat-cell>
+    </ng-container>
+
     <!-- actions -->
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>
@@ -47,12 +52,16 @@
       </mat-header-cell>
 
       <mat-cell *matCellDef="let row; let i=index;">
-        <button mat-icon-button color="accent" (click)="startEdit(i, row)">
+        <button mat-icon-button color="accent" (click)="startEdit(i, row)" *ngIf="row.isActive" >
           <mat-icon aria-label="Edit">edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="accent" (click)="deleteItem(i, row.id, row.firstName, row.lastName, row.documentNumber)">
+        <button mat-icon-button color="accent" (click)="deleteItem(i, row)" *ngIf="row.isActive" >
           <mat-icon aria-label="Delete">delete</mat-icon>
+        </button>
+
+        <button mat-icon-button color="accent" (click)="activateItem(i, row)" *ngIf="!row.isActive" >
+          <mat-icon aria-label="Activate">check_circle</mat-icon>
         </button>
       </mat-cell>
     </ng-container>

@@ -1,50 +1,32 @@
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
-import {CustomerService} from '../../services/customer.service';
 import {Customer} from '../../models/customer';
-import {Globals} from '../../shared/globals';
-import {FormControl, Validators} from '@angular/forms';
+import {CustomerService} from '../../services/customer.service';
 import {BlockUI, NgBlockUI } from 'ng-block-ui';
-import {RequestCustomerDto} from '../../models/dto/requestCustomerDto';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
+import { RequestCustomerDto } from '../../models/dto/requestCustomerDto';
 
 
 @Component({
-  selector: 'app-baza.dialog',
-  templateUrl: './edit.dialog.html',
-  styleUrls: ['./edit.dialog.css']
+  selector: 'app-activate.dialog',
+  templateUrl: './activate.dialog.html',
+  styleUrls: ['./activate.dialog.css']
 })
-export class EditDialogComponent {
+export class ActivateDialogComponent {
   @BlockUI() blockUI: NgBlockUI;
   requestCustomer: RequestCustomerDto;
 
-  constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: Customer,
-              public globals : Globals,
+  constructor(public dialogRef: MatDialogRef<ActivateDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: Customer, 
               public _messageAlertHandleService: MessageAlertHandleService,
               public _customerService: CustomerService) { }
-
-  formControl = new FormControl('', [
-    Validators.required,
-    Validators.email
-  ]);
-
-  getErrorMessage() {
-    return this.formControl.hasError('required') ? 'Required field' :
-      this.formControl.hasError('email') ? 'Not a valid email' :
-        '';
-  }
-
-  submit() {
-    
-  }
 
   onNoClick(): void {
     this.dialogRef.close('x');
   }
 
-  confirmEdit(): void {
-      this.blockUI.start();
+  confirmAtivate(): void {
+    this.blockUI.start();    
       this.requestCustomer = new RequestCustomerDto()
           .setFirstName(this.data.firstName)
           .setLastName(this.data.lastName)
@@ -52,7 +34,7 @@ export class EditDialogComponent {
           .setBirthDate(this.data.birthDate)
           .setCellphone(this.data.cellphone)
           .setEmail(this.data.email)
-          .setIsActive(this.data.isActive)
+          .setIsActive('true')
           .setUser(this.data.user)
           .setPassword(this.data.password)
           .setRolId(this.data.id_rol)
@@ -63,10 +45,10 @@ export class EditDialogComponent {
             this.blockUI.stop();
             
             if(successData.response.httpStatus == '200'){
+              this.data.isActive = 'true';
               this._customerService.dialogData = this.data;
-              this._messageAlertHandleService.handleSuccess(successData.response.message);              
+              this._messageAlertHandleService.handleSuccess(successData.response.message);
               this.dialogRef.close(1);
-              
             }else{
               this._customerService.dialogData = null;              
               this._messageAlertHandleService.handleError(successData.response.message);
@@ -79,6 +61,5 @@ export class EditDialogComponent {
         },
         () => {}
     );
-    
   }
 }

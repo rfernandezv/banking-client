@@ -1,62 +1,50 @@
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
-import {BankAccountService} from '../../services/bank-account.service';
 import {BankAccount} from '../../models/bank-account';
-import {Globals} from '../../shared/globals';
-import {FormControl, Validators} from '@angular/forms';
+import {BankAccountService} from '../../services/bank-account.service';
 import {BlockUI, NgBlockUI } from 'ng-block-ui';
-import {RequestBankAccountDto} from '../../models/dto/requestBankAccountDto';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
+import { RequestBankAccountDto } from '../../models/dto/requestBankAccountDto';
 
 
 @Component({
-  selector: 'app-baza.dialog',
-  templateUrl: './edit.dialog.html',
-  styleUrls: ['./edit.dialog.css']
+  selector: 'app-activate.dialog',
+  templateUrl: './activate.dialog.html',
+  styleUrls: ['./activate.dialog.css']
 })
-export class EditDialogBankComponent {
-  @BlockUI() blockUI: NgBlockUI;
+export class ActivateDialogBankComponent {
   requestBankAccountDto: RequestBankAccountDto;
+  @BlockUI() blockUI: NgBlockUI;
 
-  constructor(public dialogRef: MatDialogRef<EditDialogBankComponent>,
+  constructor(public dialogRef: MatDialogRef<ActivateDialogBankComponent>,
               @Inject(MAT_DIALOG_DATA) public data: BankAccount, 
               public _messageAlertHandleService: MessageAlertHandleService,
-              public globals : Globals,
               public _bankAccountService: BankAccountService) { }
-
-  formControl = new FormControl('', [
-      Validators.required,
-      Validators.email
-  ]);
-
-  getErrorMessage() {
-    return this.formControl.hasError('required') ? 'Required field' :
-      this.formControl.hasError('email') ? 'Not a valid email' :
-        '';
-  }
-
-  submit() {    
-  }
 
   onNoClick(): void {
     this.dialogRef.close('x');
   }
 
-  confirmEdit(): void {
+  getDescriptionIsLocked(isLocked : boolean) : string{
+    return (isLocked)?'Yes':'No';
+  }
+
+  confirmActivate(): void {
     this.blockUI.start();
     this.requestBankAccountDto = new RequestBankAccountDto()
         .setId(this.data.id)
         .setNumber(this.data.number)
-        .setIsLocked(this.data.isLocked)
+        .setIsLocked('false')
         .setBalance(this.data.balance)
         .setCustomerId(this.data.customerId)
     ;
-
+    console.log('richar');
     this._bankAccountService.updateBankAccount(this.data.id, this.requestBankAccountDto).subscribe(
           successData => {              
             this.blockUI.stop();
             
             if(successData.response.httpStatus == '200'){
+              this.data.isLocked = 'false';
               this._bankAccountService.dialogData = this.data;
               this._messageAlertHandleService.handleSuccess(successData.response.message);              
               this.dialogRef.close(1);

@@ -2,7 +2,7 @@ export class BankAccount {
      id: number;
      number: string;
      balance: number;
-     isLocked: boolean;
+     isLocked: string;
      customerId: number;
 
      constructor() {}
@@ -22,7 +22,7 @@ export class BankAccount {
         return this;
     }
 
-    public setIsLocked(value: boolean): BankAccount {
+    public setIsLocked(value: string): BankAccount {
         this.isLocked = value;
         return this;
     }

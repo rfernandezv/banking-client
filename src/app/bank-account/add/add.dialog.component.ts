@@ -40,7 +40,7 @@ export class AddDialogBankComponent {
   }
 
   onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close('x');
   }
 
   public confirmAdd(): void {    
@@ -62,6 +62,7 @@ export class AddDialogBankComponent {
               if(successData.response.httpStatus == '201'){
                 this._bankAccountService.dialogData = this.data;
                 this._messageAlertHandleService.handleSuccess(successData.response.message);
+                this.dialogRef.close(1);
               }else{
                 this._bankAccountService.dialogData = null;
                 this._messageAlertHandleService.handleError(successData.response.message);
