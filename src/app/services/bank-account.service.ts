@@ -65,8 +65,6 @@ export class BankAccountService {
   }
 
   addBankAccount (requestBankAccountDto: RequestBankAccountDto): Observable<ResponseApi> {
-    console.log(this.API_URL+'/bankAccount');
-    console.log(requestBankAccountDto);
     return this.httpClient
             .post(this.API_URL+'/bankAccount', requestBankAccountDto,  HttpOptionsConst)
             .map(

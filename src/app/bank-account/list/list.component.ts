@@ -115,8 +115,11 @@ export class ListComponent implements OnInit {
   }
 
   addNew(bankAccount: BankAccount) {
+      
       const dialogRef = this.dialog.open(AddDialogBankComponent, {
-        data: {bankAccount: bankAccount }
+        data: {number : '',               
+               customerId : this.customerSearch.id
+             }
       });
 
       dialogRef.afterClosed().subscribe(result => {

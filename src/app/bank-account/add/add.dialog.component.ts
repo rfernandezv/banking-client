@@ -47,13 +47,15 @@ export class AddDialogBankComponent {
         
         this.blockUI.start();
         this.data.balance = 0;
+        this.data.isLocked = 'false';
         this.requestBankAccountDto = new RequestBankAccountDto()
             .setId(this.data.id)
             .setNumber(this.data.number)
-            .setIsLocked(this.data.isLocked)
+            .setIsLocked(this.data.isLocked )
             .setBalance(this.data.balance)
-            .setCustomerId(this.globals.customer.id)
-        ;        
+            .setCustomerId(this.data.customerId)
+        ;
+
         this._bankAccountService.addBankAccount(this.requestBankAccountDto).subscribe(
 
           successData => {              
@@ -77,6 +79,7 @@ export class AddDialogBankComponent {
           () => {}
 
       );
+      
   }
 
   updateNewBankAccount(accountNumber : string){
