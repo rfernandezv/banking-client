@@ -1,6 +1,23 @@
-<div class="container mat-elevation-z8">
 
-  <div class="form">
+<div class="bankAccount-content">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <span>Please search a customer:</span>
+   
+    <mat-form-field class="full-width-input">
+        <input matInput placeholder="Document Number" [(ngModel)]="documentoNumberSearch" formControlName="documentNumber" maxlength="9" required>
+        <mat-error *ngIf="isFieldInvalid('documentNumber')">
+            Please complete the document number
+        </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" class="full-width-input">Search</button>
+
+    <span *ngIf="searchCompleted" >{{customerSearch.firstName + ' ' + customerSearch.lastName }}</span>
+  </form>
+</div>
+
+<div class="container mat-elevation-z8" [hidden]="searchCompleted" >
+
+  <div class="form" >
     <mat-form-field floatPlaceholder="never" color="accent">
       <input matInput #filter placeholder="Filter bank accounts">
     </mat-form-field>
@@ -29,9 +46,9 @@
     </ng-container>
 
     <!-- actions -->
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>
-        <button mat-icon-button color="primary" (click)="addNew()">
+    <ng-container matColumnDef="actions" >
+      <mat-header-cell *matHeaderCellDef >
+        <button mat-icon-button color="primary" (click)="addNew()" *ngIf="searchCompleted" >
           <mat-icon aria-label="New Bank Account">add</mat-icon>
         </button>
       </mat-header-cell>

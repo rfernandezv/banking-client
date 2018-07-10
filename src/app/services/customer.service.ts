@@ -39,6 +39,11 @@ export class CustomerService {
        });
   }
 
+  getCustomerByNumDoc (numDoc : string): Observable<Customer> {
+      return this.httpClient.get<Customer>(this.API_URL+'/findByDocumentNumber?documentNumber='+numDoc)
+              .map(data => data)
+              .catch((error: any) => Observable.throw(error || 'Server error'));
+  }
 
   addCustomer (requestCustomerDto: RequestCustomerDto): Observable<ResponseApi> {
     return this.httpClient

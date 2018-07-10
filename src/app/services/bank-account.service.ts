@@ -45,7 +45,7 @@ export class BankAccountService {
               this.dataChange.next(data);
             },
             (error: HttpErrorResponse) => {
-               // console.log (error.name + ' ' + error.message);
+                console.log (error.name + ' ' + error.message);
             });
   }
 
@@ -58,8 +58,15 @@ export class BankAccountService {
             .catch((error: any) => Observable.throw(error || 'Server error'));
   }
 
-  addBankAccount (requestBankAccountDto: RequestBankAccountDto): Observable<ResponseApi> {
+  getCustomerByAccountNumber (accountNumber : string): Observable<BankAccount> {
+    return this.httpClient.get<BankAccount>(this.API_URL+'/findByAccountNumber?accountNumber='+accountNumber)
+            .map(data => data)
+            .catch((error: any) => Observable.throw(error || 'Server error'));
+  }
 
+  addBankAccount (requestBankAccountDto: RequestBankAccountDto): Observable<ResponseApi> {
+    console.log(this.API_URL+'/bankAccount');
+    console.log(requestBankAccountDto);
     return this.httpClient
             .post(this.API_URL+'/bankAccount', requestBankAccountDto,  HttpOptionsConst)
             .map(

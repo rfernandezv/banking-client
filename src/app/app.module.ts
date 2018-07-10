@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule} from '@angular/common/http';
 import {
   MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule,
-  MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule,
+  MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule, 
   MatCheckboxModule, MatTableModule, MatToolbarModule, MAT_DIALOG_DATA, MatDialogRef
 } from '@angular/material';
 import { ToastModule } from 'ng2-toastr';

@@ -60,6 +60,7 @@ export class AddDialogBankComponent {
               this.blockUI.stop();
               
               if(successData.response.httpStatus == '201'){
+                this.updateNewBankAccount(this.data.number);
                 this._bankAccountService.dialogData = this.data;
                 this._messageAlertHandleService.handleSuccess(successData.response.message);
                 this.dialogRef.close(1);
@@ -76,6 +77,19 @@ export class AddDialogBankComponent {
           () => {}
 
       );
+  }
 
+  updateNewBankAccount(accountNumber : string){
+    this._bankAccountService.getCustomerByAccountNumber(accountNumber).subscribe(
+        successData => {
+            if(successData != null){
+              this.data.id = successData.id;
+            }
+        },
+        error => {
+           console.log(error);
+        },
+        () => {}
+    );
   }
 }

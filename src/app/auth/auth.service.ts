@@ -38,7 +38,7 @@ export class AuthService {
        this.authentication(user.userName, user.password).subscribe(
               successData => {
                 this.globals.customer = successData.response.content;
-                this._messageAlertHandleService.handleSuccess(successData.response.message);
+                //this._messageAlertHandleService.handleSuccess(successData.response.message); //rfv
               },
               error => {
                 this._messageAlertHandleService.handleError(error);                
