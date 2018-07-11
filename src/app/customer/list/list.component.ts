@@ -6,6 +6,7 @@ import {Customer} from '../.././models/customer';
 import {Observable } from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {DataSource} from '@angular/cdk/collections';
+import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
@@ -24,21 +25,25 @@ import {ActivateDialogComponent} from '.././activate/activate.dialog.component';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
+  @BlockUI() blockUI: NgBlockUI;
   displayedColumns = ['id', 'firstName', 'lastName', 'documentNumber', 'cellphone', 'email', 'isActive', 'actions'];
   customerDataBase: CustomerService | null;
   customerDataSource: CustomerDataSource | null;
   index: number;
   id: number;
+  
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
-              public _CustomerService: CustomerService) {}
+              public _CustomerService: CustomerService) {
+              }
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('filter') filter: ElementRef;
 
   ngOnInit() {
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     this.loadData();
   }
 
@@ -156,23 +161,16 @@ export class ListComponent implements OnInit {
 
 
   private refreshTable() {
-      if (this.customerDataSource._paginator.hasNextPage()) {
-        this.customerDataSource._paginator.nextPage();
-        this.customerDataSource._paginator.previousPage();
-      } else if (this.customerDataSource._paginator.hasPreviousPage()) {
-        this.customerDataSource._paginator.previousPage();
-        this.customerDataSource._paginator.nextPage();
-      } else {
-        this.customerDataSource.filter = '';
-        this.customerDataSource.filter = this.filter.nativeElement.value;
-      }
+    this.blockUI.start('Loading...');
+    this.customerDataSource.connect();
+    this.blockUI.stop();
   }
 
 
   public loadData() {
+    this.blockUI.start('Loading...');
     this.customerDataBase = new CustomerService(this.httpClient);
     this.customerDataSource = new CustomerDataSource(this.customerDataBase, this.paginator, this.sort);
-
     
     Observable.fromEvent(this.filter.nativeElement, 'keyup')
         .debounceTime(150)
@@ -182,7 +180,18 @@ export class ListComponent implements OnInit {
             return;
           }
           this.customerDataSource.filter = this.filter.nativeElement.value;
-        });      
+        }); 
+    this.blockUI.stop();  
+  }
+
+  public handlePage(e: any) {
+    this.blockUI.start('Loading...');
+
+    this.customerDataSource.pageIndex = e.pageIndex;
+    this.customerDataSource.pageSize = e.pageSize;
+    this.customerDataSource.connect();
+
+    this.blockUI.stop();
   }
 
 }
@@ -191,6 +200,9 @@ export class ListComponent implements OnInit {
 export class CustomerDataSource extends DataSource<Customer> {
   _filterChange = new BehaviorSubject('');
   searchStr : string;
+  lengthPage : number = 0;  
+  pageIndex : number = 0;
+  pageSize : number = 20;
 
   get filter(): string {
     return this._filterChange.value;
@@ -205,20 +217,23 @@ export class CustomerDataSource extends DataSource<Customer> {
 
   constructor(public _customerDatabase: CustomerService,
               public _paginator: MatPaginator,
-              public _sort: MatSort) {
+              public _sort: MatSort
+            ) {
     super();
     this._filterChange.subscribe(() => this._paginator.pageIndex = 0);
   }
 
   connect(): Observable<Customer[]> {
+    
         const displayDataChanges = [
           this._customerDatabase.dataChange,
+          this._customerDatabase.totalSize,
           this._sort.sortChange,
           this._filterChange,
           this._paginator.page
         ];
-
-        this._customerDatabase.getAllCustomers();
+        
+        this._customerDatabase.getAllCustomersByLimit(this.pageIndex+1, this.pageSize);        
 
         this.filteredData = this._customerDatabase.data.slice().filter((customer: Customer) => {
           const searchStr = (customer.firstName + customer.lastName + customer.documentNumber).toLowerCase();
@@ -227,22 +242,24 @@ export class CustomerDataSource extends DataSource<Customer> {
 
         const sortedData = this.sortData(this.filteredData.slice());
 
-        const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+        const startIndex = 0;
         this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
 
         return Observable.merge(...displayDataChanges).map(() => {
+          this.lengthPage = this._customerDatabase.getTotalSize();
+
           this.filteredData = this._customerDatabase.data.slice().filter((customer: Customer) => {
+
             if(customer === undefined || customer.id === undefined){
               this.searchStr = '';
             }else{
               this.searchStr = (customer.firstName + customer.lastName + customer.documentNumber).toLowerCase();
             }            
             return this.searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-          });
-
+          });          
           const sortedData = this.sortData(this.filteredData.slice());
 
-          const startIndex = this._paginator.pageIndex * this._paginator.pageSize;
+          const startIndex = 0;
           this.renderedData = sortedData.splice(startIndex, this._paginator.pageSize);
           return this.renderedData;
         });      

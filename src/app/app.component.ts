@@ -4,8 +4,10 @@ import { ToastsManager } from 'ng2-toastr';
 @Component({
   selector: 'app-root',
   template: `
+  <block-ui>
     <app-header></app-header>
     <router-outlet></router-outlet>
+  </block-ui>
   `,
   styles: []
 })
