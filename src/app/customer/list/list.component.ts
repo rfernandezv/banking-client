@@ -162,14 +162,14 @@ export class ListComponent implements OnInit {
 
 
   private refreshTable() {
-    this.blockUI.start('Loading...');
+    this.blockUI.start();
     this.customerDataSource.connect();
     this.blockUI.stop();
   }
 
 
   public loadData() {
-    this.blockUI.start('Loading...');
+    this.blockUI.start();
     this.customerDataBase = new CustomerService(this.httpClient);
     this.customerDataSource = new CustomerDataSource(this.customerDataBase, this.paginator, this.sort);
     
@@ -186,7 +186,7 @@ export class ListComponent implements OnInit {
   }
 
   public handlePage(e: any) {
-    this.blockUI.start('Loading...');
+    this.blockUI.start();
 
     this.customerDataSource.pageIndex = e.pageIndex;
     this.customerDataSource.pageSize = e.pageSize;

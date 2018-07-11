@@ -3,7 +3,7 @@ import {BankAccountService} from '../../services/bank-account.service';
 import {CustomerService} from '../../services/customer.service';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
 import {HttpClient} from '@angular/common/http';
-import {MatDialog, MatPaginator, MatSort} from '@angular/material';
+import {MatDialog, MatPaginator, MatSort, PageEvent} from '@angular/material';
 import {BankAccount} from '../.././models/bank-account';
 import {Customer} from '../.././models/customer';
 import {Globals} from '../../shared/globals';
@@ -39,6 +39,7 @@ export class ListComponent implements OnInit {
   searchCompleted : boolean;
   index: number;
   id: number;
+  pageEvent: PageEvent;
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
@@ -69,6 +70,7 @@ export class ListComponent implements OnInit {
   }
 
   setUpControls(){
+      this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
       this.form = this.fb.group({
         documentNumber: new FormControl('', [Validators.required, Validators.maxLength(9)] )
       });
@@ -132,7 +134,7 @@ export class ListComponent implements OnInit {
       });
   }
 
-    startEdit(i: number, bankAccount : BankAccount) {
+  startEdit(i: number, bankAccount : BankAccount) {
         this.index = i;
         this.id = bankAccount.id;
         const dialogRef = this.dialog.open(EditDialogBankComponent, {
@@ -153,10 +155,10 @@ export class ListComponent implements OnInit {
             }        
           }
         });
-    }
+  }
 
 
-    deleteItem(i: number, bankAccount : BankAccount) {
+ deleteItem(i: number, bankAccount : BankAccount) {
         this.index = i;
         this.id = bankAccount.id;
         const dialogRef = this.dialog.open(DeleteDialogBankComponent, {
@@ -177,10 +179,10 @@ export class ListComponent implements OnInit {
             }        
           }
         });
-    }
+  }
 
 
-    activateItem(i: number, bankAccount : BankAccount) {
+  activateItem(i: number, bankAccount : BankAccount) {
       this.index = i;
       this.id = bankAccount.id;
       const dialogRef = this.dialog.open(ActivateDialogBankComponent, {
@@ -201,20 +203,20 @@ export class ListComponent implements OnInit {
           }        
         }
       });
-    }
+  }
 
-private refreshTable() {
-    if (this.bankAccountDataSource._paginator.hasNextPage()) {
-      this.bankAccountDataSource._paginator.nextPage();
-      this.bankAccountDataSource._paginator.previousPage();
-    } else if (this.bankAccountDataSource._paginator.hasPreviousPage()) {
-      this.bankAccountDataSource._paginator.previousPage();
-      this.bankAccountDataSource._paginator.nextPage();
-    } else {
-      this.bankAccountDataSource.filter = '';
-      this.bankAccountDataSource.filter = this.filter.nativeElement.value;
-    }
-}
+  private refreshTable() {
+      if (this.bankAccountDataSource._paginator.hasNextPage()) {
+        this.bankAccountDataSource._paginator.nextPage();
+        this.bankAccountDataSource._paginator.previousPage();
+      } else if (this.bankAccountDataSource._paginator.hasPreviousPage()) {
+        this.bankAccountDataSource._paginator.previousPage();
+        this.bankAccountDataSource._paginator.nextPage();
+      } else {
+        this.bankAccountDataSource.filter = '';
+        this.bankAccountDataSource.filter = this.filter.nativeElement.value;
+      }
+  }
 
 
 public loadData() {

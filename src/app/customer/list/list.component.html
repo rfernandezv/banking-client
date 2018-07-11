@@ -76,11 +76,10 @@
   </div>
 
   <mat-paginator #paginator
-                 class="btn  btn-default btn-block"
                  [length]="customerDataSource.lengthPage"
                  [pageIndex]="customerDataSource.pageIndex"
                  [pageSize]="customerDataSource.pageSize"
                  [pageSizeOptions]="[5, 10, 25, 100]"
-                 (page)="pageEvent = handlePage($event)" >
+                 (page)="handlePage($event)" >
   </mat-paginator>
 </div>
