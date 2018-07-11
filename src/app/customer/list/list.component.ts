@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CustomerService} from '../../services/customer.service';
 import {HttpClient} from '@angular/common/http';
-import {MatDialog, MatPaginator, MatSort} from '@angular/material';
+import {MatDialog, MatPaginator, MatSort, PageEvent} from '@angular/material';
 import {Customer} from '../.././models/customer';
 import {Observable } from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -31,6 +31,7 @@ export class ListComponent implements OnInit {
   customerDataSource: CustomerDataSource | null;
   index: number;
   id: number;
+  pageEvent: PageEvent;
   
 
   constructor(public httpClient: HttpClient,
