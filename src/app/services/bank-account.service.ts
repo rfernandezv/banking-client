@@ -19,17 +19,10 @@ export class BankAccountService {
 
   dataChange: BehaviorSubject<BankAccount[]> = new BehaviorSubject<BankAccount[]>([]);
   dialogData: BankAccount;
+  totalSize : BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   constructor (private httpClient: HttpClient) {}
-
-  get data(): BankAccount[] {
-    return this.dataChange.value;
-  }
-
-  getDialogData() {
-    return this.dialogData;
-  }
-
+  
   getAllBankAccount(): void {
     this.httpClient.get<ResponseAllBankAccountDto>(this.API_URL+'/bankAccount?offset=1&limit=20').subscribe(data => {
         this.dataChange.next(data.content);
@@ -90,4 +83,16 @@ export class BankAccountService {
             )
           .catch((error: any) => Observable.throw(error || 'Server error'));
   }
+
+  get data(): BankAccount[] {
+    return this.dataChange.value;
+  }
+
+  getDialogData() {
+    return this.dialogData;
+  }
+
+  getTotalSize() : number{
+    return this.totalSize.value;
+}
 }

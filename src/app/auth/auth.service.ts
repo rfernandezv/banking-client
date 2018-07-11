@@ -20,6 +20,7 @@ import { ResponseApi } from '../models/dto/responseApi';
 export class AuthService {
   API_URL : string = environment.apiUrl + 'login';
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  private message : string;
 
   get isLoggedIn() {
     return this.loggedIn.asObservable();
@@ -37,15 +38,20 @@ export class AuthService {
 
        this.authentication(user.userName, user.password).subscribe(
               successData => {
-                this.globals.customer = successData.response.content;
-                //this._messageAlertHandleService.handleSuccess(successData.response.message); //rfv
+                this.globals.customer = successData.response.content;                
+                this.message = successData.response.message;
               },
               error => {
-                this._messageAlertHandleService.handleError(error);                
+                this._messageAlertHandleService.handleError(error);
               },
               () => {
-                this.loggedIn.next(true);
-                this.router.navigate(['/dashboard']); 
+                if(this.globals.customer.id_rol != null){
+                    this._messageAlertHandleService.handleSuccess(this.message);
+                    this.loggedIn.next(true);
+                    this.router.navigate(['/dashboard']);                    
+                }else{
+                  this._messageAlertHandleService.handleError('You dont have any rol for access to this web. Contact the administrator to obtain permission');
+                }                
               }
         );
     }

@@ -10,6 +10,7 @@ import {Globals} from '../../shared/globals';
 import {Observable } from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {DataSource} from '@angular/cdk/collections';
+import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/map';
@@ -29,6 +30,7 @@ import {ActivateDialogBankComponent} from '../activate/activate.dialog.component
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
+  @BlockUI() blockUI: NgBlockUI;
   displayedColumns = ['id', 'number', 'balance', 'isLocked','actions'];
   bankAccountDataBase: BankAccountService | null;
   bankAccountDataSource: BankAccountDataSource | null;
@@ -206,42 +208,50 @@ export class ListComponent implements OnInit {
   }
 
   private refreshTable() {
-      if (this.bankAccountDataSource._paginator.hasNextPage()) {
-        this.bankAccountDataSource._paginator.nextPage();
-        this.bankAccountDataSource._paginator.previousPage();
-      } else if (this.bankAccountDataSource._paginator.hasPreviousPage()) {
-        this.bankAccountDataSource._paginator.previousPage();
-        this.bankAccountDataSource._paginator.nextPage();
-      } else {
-        this.bankAccountDataSource.filter = '';
-        this.bankAccountDataSource.filter = this.filter.nativeElement.value;
-      }
+    this.blockUI.start();
+    this.bankAccountDataSource.connect();
+    this.blockUI.stop();
   }
 
 
-public loadData() {
-  this.bankAccountDataBase = new BankAccountService(this.httpClient);
-  this.bankAccountDataSource = new BankAccountDataSource(this.bankAccountDataBase, this.paginator, this.globals, this.sort, this.customerSearch);
-  
-    if(this.filter.nativeElement != undefined){
-        Observable.fromEvent(this.filter.nativeElement, 'keyup')
-            .debounceTime(150)
-            .distinctUntilChanged()
-            .subscribe(() => {
-              if (!this.bankAccountDataSource) {
-                return;
-              }
-              this.bankAccountDataSource.filter = this.filter.nativeElement.value;
-            });
-    }
-  
+  public loadData() {
+      this.blockUI.start();
+      this.bankAccountDataBase = new BankAccountService(this.httpClient);
+      this.bankAccountDataSource = new BankAccountDataSource(this.bankAccountDataBase, this.paginator, this.globals, this.sort, this.customerSearch);
+      
+      if(this.filter.nativeElement != undefined){
+            Observable.fromEvent(this.filter.nativeElement, 'keyup')
+                .debounceTime(150)
+                .distinctUntilChanged()
+                .subscribe(() => {
+                  if (!this.bankAccountDataSource) {
+                    return;
+                  }
+                  this.bankAccountDataSource.filter = this.filter.nativeElement.value;
+                });
+      } 
+      this.blockUI.stop();
   }
+
+  public handlePage(e: any) {
+    this.blockUI.start();
+
+    this.bankAccountDataSource.pageIndex = e.pageIndex;
+    this.bankAccountDataSource.pageSize = e.pageSize;
+    this.bankAccountDataSource.connect();
+
+    this.blockUI.stop();
+  }
+
 }
 
 
 export class BankAccountDataSource extends DataSource<BankAccount> {
   _filterChange = new BehaviorSubject('');
   searchStr : string;
+  lengthPage : number = 0;  
+  pageIndex : number = 0;
+  pageSize : number = 20;
 
   get filter(): string {
     return this._filterChange.value;
@@ -274,6 +284,7 @@ export class BankAccountDataSource extends DataSource<BankAccount> {
   connect(): Observable<BankAccount[]> {
         const displayDataChanges = [
           this._bankAccountDatabase.dataChange,
+          this._bankAccountDatabase.totalSize,
           this._sort.sortChange,
           this._filterChange,
           this._paginator.page
