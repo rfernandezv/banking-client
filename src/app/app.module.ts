@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import { AuthInterceptor} from './shared/security/httpInterceptor';
+
 import {
   MatButtonModule, MatDialogModule, MatIconModule, MatInputModule, MatPaginatorModule, MatSortModule,
   MatProgressSpinnerModule, MatDatepickerModule, MatNativeDateModule, 
@@ -29,7 +31,7 @@ import { ActivateDialogBankComponent} from './bank-account/activate/activate.dia
 import { TranferService} from './services/transfer.service';
 import { CustomerService} from './services/customer.service';
 import { BankAccountService} from './services/bank-account.service';
-import { Globals} from './shared/globals';
+import { Globals} from './shared/models/globals';
 import { MessageAlertHandleService} from './services/message-alert.service';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -96,6 +98,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
   ],
   providers: [
     AuthService, AuthGuard, TranferService, CustomerService, BankAccountService, MessageAlertHandleService, Globals,
+     { 
+      provide: HTTP_INTERCEPTORS, 
+      useClass: AuthInterceptor, 
+      multi: true 
+    } ,
     { provide: MatDialogRef, useValue: {} }, 
     { provide: MAT_DIALOG_DATA, useValue: {}}
   ],

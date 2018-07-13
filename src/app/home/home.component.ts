@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Globals} from '../shared/globals';
+import { Globals} from '../shared/models/globals';
 import { environment } from '../../environments/environment';
 
 

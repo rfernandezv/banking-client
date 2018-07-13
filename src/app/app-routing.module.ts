@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'customer/list', component: ListComponent, canActivate: [AuthGuard] },
   { path: 'bank-account/list', component: ListBankAccountComponent, canActivate: [AuthGuard] },
   { path: 'bank-account/transfer', component: TransferComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: ''}
+  { path: '**', redirectTo: 'dashboard', pathMatch: 'full', canActivate: [AuthGuard]}
 ];
 
 @NgModule({

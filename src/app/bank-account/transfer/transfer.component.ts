@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
 import { BankAccount } from '../../models/bank-account';
 import { Transfer } from '../../models/transfer';
 import { Router } from '@angular/router';
-import { Globals} from '../../shared/globals';
+import { Globals} from '../../shared/models/globals';
 import { Subscription } from 'rxjs/Subscription';
 import { Validators, FormBuilder, FormGroup, FormControl} from '@angular/forms';
 import { TranferService } from '../../services/transfer.service';

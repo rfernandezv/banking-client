@@ -2,7 +2,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
 import {CustomerService} from '../../services/customer.service';
 import {Customer} from '../../models/customer';
-import {Globals} from '../../shared/globals';
+import {Globals} from '../../shared/models/globals';
 import {FormControl, Validators} from '@angular/forms';
 import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {RequestCustomerDto} from '../../models/dto/requestCustomerDto';

@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { User } from './user';
 import { Customer} from '../models/customer';
-import { Globals} from '../shared/globals';
+import { Globals} from '../shared/models/globals';
 import { Observable} from 'rxjs/Observable';
-import { HttpOptionsConst} from '../shared/http-options';
+import { HttpOptionsConst} from '../shared/models/http-options';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { MessageAlertHandleService} from '../services/message-alert.service';
@@ -46,7 +46,8 @@ export class AuthService {
               },
               () => {
                 if(this.globals.customer.id_rol != null){
-                    this._messageAlertHandleService.handleSuccess(this.message);
+                    localStorage.setItem("token", this.message);
+                    this._messageAlertHandleService.handleSuccess('Login successful');
                     this.loggedIn.next(true);
                     this.router.navigate(['/dashboard']);                    
                 }else{
@@ -58,6 +59,7 @@ export class AuthService {
   }
 
   logout() {
+    localStorage.removeItem("token")
     this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }

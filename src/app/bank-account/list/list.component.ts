@@ -6,7 +6,7 @@ import {HttpClient} from '@angular/common/http';
 import {MatDialog, MatPaginator, MatSort, PageEvent} from '@angular/material';
 import {BankAccount} from '../.././models/bank-account';
 import {Customer} from '../.././models/customer';
-import {Globals} from '../../shared/globals';
+import {Globals} from '../../shared/models/globals';
 import {Observable } from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {DataSource} from '@angular/cdk/collections';

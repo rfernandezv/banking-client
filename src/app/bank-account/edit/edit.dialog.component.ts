@@ -2,7 +2,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Component, Inject} from '@angular/core';
 import {BankAccountService} from '../../services/bank-account.service';
 import {BankAccount} from '../../models/bank-account';
-import {Globals} from '../../shared/globals';
+import {Globals} from '../../shared/models/globals';
 import {FormControl, Validators} from '@angular/forms';
 import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {RequestBankAccountDto} from '../../models/dto/requestBankAccountDto';

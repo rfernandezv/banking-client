@@ -3,7 +3,7 @@ import {Component, Inject} from '@angular/core';
 import {BankAccountService} from '../../services/bank-account.service';
 import {FormControl, Validators} from '@angular/forms';
 import {BlockUI, NgBlockUI } from 'ng-block-ui';
-import {Globals} from '../../shared/globals';
+import {Globals} from '../../shared/models/globals';
 import {BankAccount} from '../../models/bank-account';
 import {RequestBankAccountDto} from '../../models/dto/requestBankAccountDto';
 import {MessageAlertHandleService} from '../../services/message-alert.service';

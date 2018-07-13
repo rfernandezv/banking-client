@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import {Customer} from '../models/customer';
 import {ResponseApi} from '../models/dto/responseApi';
 import {RequestCustomerDto} from '../models/dto/requestCustomerDto';
-import {HttpOptionsConst} from '../shared/http-options';
+import {HttpOptionsConst} from '../shared/models/http-options';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/do';
