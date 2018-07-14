@@ -11,7 +11,8 @@
         "assets",
         "favicon.ico",
         "web.config",
-        "manifest.yml"
+        "manifest.yml",
+        "Staticfile"
       ],
       "index": "index.html",
       "main": "main.ts",
