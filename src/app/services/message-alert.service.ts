@@ -37,7 +37,8 @@ export class MessageAlertHandleService {
             if(res.status == HttpStatus.UNAUTHORIZED){
                 errorMessage = 'You are '+ err.statusText + ". Your credentials are not correct, try again";
                 this.toastr.error(errorMessage);
-                this.authService.logout();                
+                //this.authService.logout();
+                this.router.navigate(['/login']);
             }
             if(res.status == HttpStatus.INTERNAL_SERVER_ERROR){
                 this.toastr.error(err.statusText);
