@@ -22,6 +22,8 @@ export class AuthService {
   private loggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private message : string;
 
+
+  
   get isLoggedIn() {
     return this.loggedIn.asObservable();
   }

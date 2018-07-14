@@ -12,6 +12,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 import { ResponseAllCustomersDto } from '../models/dto/responseAllCustomersDto';
+import { MessageAlertHandleService } from './message-alert.service';
 
 @Injectable()
 export class CustomerService {
@@ -21,7 +22,9 @@ export class CustomerService {
   dialogData: Customer; 
   totalSize : BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  constructor (private httpClient: HttpClient) {}
+  constructor (private httpClient: HttpClient,
+              public _messageAlertHandleService: MessageAlertHandleService,
+              ) {}
   
 
   getCustomerByNumDoc (numDoc : string): Observable<Customer> {
@@ -58,13 +61,17 @@ export class CustomerService {
   }
 
   getAllCustomersByLimit(offset : number, limit : number): void {
-    this.httpClient.get<ResponseAllCustomersDto>(this.API_URL+'/customer?offset='+offset+'&limit='+limit).subscribe(data => {
+    this.httpClient.get<ResponseAllCustomersDto>(this.API_URL+'/customer?offset='+offset+'&limit='+limit).subscribe(
+      data => {
         this.totalSize.next(data.totalRecords);
         this.dataChange.next(data.content);
       },
-      (error: HttpErrorResponse) => {
-          console.log (error.name + ' ' + error.message);
-       });
+      (error : any) => {
+        this._messageAlertHandleService.handleError(error);
+      },
+      () => {
+      }
+      );
   }
   
   get data(): Customer[] {

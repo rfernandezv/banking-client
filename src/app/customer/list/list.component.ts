@@ -17,6 +17,7 @@ import {AddDialogComponent} from '.././add/add.dialog.component';
 import {EditDialogComponent} from '.././edit/edit.dialog.component';
 import {DeleteDialogComponent} from '.././delete/delete.dialog.component';
 import {ActivateDialogComponent} from '.././activate/activate.dialog.component';
+import { MessageAlertHandleService } from '../../services/message-alert.service';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class ListComponent implements OnInit {
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
+              public _messageAlertHandleService: MessageAlertHandleService,
               public _CustomerService: CustomerService) {
               }
 
@@ -170,7 +172,7 @@ export class ListComponent implements OnInit {
 
   public loadData() {
     this.blockUI.start();
-    this.customerDataBase = new CustomerService(this.httpClient);
+    this.customerDataBase = new CustomerService(this.httpClient, this._messageAlertHandleService);
     this.customerDataSource = new CustomerDataSource(this.customerDataBase, this.paginator, this.sort);
     
     Observable.fromEvent(this.filter.nativeElement, 'keyup')

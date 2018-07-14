@@ -12,6 +12,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 import { ResponseAllBankAccountDto } from '../models/dto/responseAllBankAccountDto';
+import { MessageAlertHandleService } from './message-alert.service';
 
 @Injectable()
 export class BankAccountService {
@@ -21,25 +22,29 @@ export class BankAccountService {
   dialogData: BankAccount;
   totalSize : BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  constructor (private httpClient: HttpClient) {}
+  constructor (private httpClient: HttpClient,
+              public _messageAlertHandleService: MessageAlertHandleService
+              ) {}
   
   getAllBankAccount(): void {
     this.httpClient.get<ResponseAllBankAccountDto>(this.API_URL+'/bankAccount?offset=1&limit=20').subscribe(data => {
         this.dataChange.next(data.content);
       },
       (error: HttpErrorResponse) => {
-          console.log (error.name + ' ' + error.message);
+          this._messageAlertHandleService.handleError(error);
       });
   }
 
   getAllBankAccountByCustomerIdView(customerId : number): void {
      this.httpClient
-            .get<BankAccount[]>(this.API_URL+'/customer/'+customerId, HttpOptionsConst).subscribe(data => {
-              this.dataChange.next(data);
-            },
-            (error: HttpErrorResponse) => {
-                console.log (error.name + ' ' + error.message);
-            });
+            .get<BankAccount[]>(this.API_URL+'/customer/'+customerId, HttpOptionsConst).subscribe(
+              data => {
+                this.dataChange.next(data);
+              },
+              (error: HttpErrorResponse) => {
+                this._messageAlertHandleService.handleError(error);
+              }
+          );
   }
 
   getAllBankAccountByCustomerId (customerId : number): Observable<BankAccount[]> {

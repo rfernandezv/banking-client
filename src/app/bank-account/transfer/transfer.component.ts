@@ -60,7 +60,7 @@ export class TransferComponent implements OnInit, OnDestroy {
         successData => {
           this.BankAccountsOrigin = successData;
           if(this.BankAccountsOrigin.length == 0){
-            this._messageAlertHandleService.handleWarning("Your user dont have any associated bank account ");
+            this._messageAlertHandleService.handleWarning("Your user doesnt have any associated bank account ");
           }
         },
         error => {

@@ -216,7 +216,7 @@ export class ListComponent implements OnInit {
 
   public loadData() {
       this.blockUI.start();
-      this.bankAccountDataBase = new BankAccountService(this.httpClient);
+      this.bankAccountDataBase = new BankAccountService(this.httpClient, this._messageAlertHandleService);
       this.bankAccountDataSource = new BankAccountDataSource(this.bankAccountDataBase, this.paginator, this.globals, this.sort, this.customerSearch);
       
       if(this.filter.nativeElement != undefined){
