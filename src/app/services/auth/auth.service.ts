@@ -10,7 +10,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 import { environment } from '../../../environments/environment';
 import { Globals } from '../../shared/models/globals';
-import { MessageAlertHandleService } from '../message-alert.service';
 import { Customer } from '../../models/customer';
 import { HttpOptionsConst } from '../../shared/models/http-options';
 import { ResponseApi } from '../../models/dto/responseApi';
@@ -23,7 +22,9 @@ export class AuthService {
   private message : string;
 
 
-  
+  getLoggedIn() : BehaviorSubject<boolean>{
+    return this.loggedIn;
+  }
   get isLoggedIn() {
     return this.loggedIn.asObservable();
   }
@@ -34,33 +35,13 @@ export class AuthService {
   constructor(
     private router: Router,
     private httpClient: HttpClient,
-    private globals: Globals,
-    public _messageAlertHandleService: MessageAlertHandleService
+    private globals: Globals
   ) {}
 
   login(user: User) {
     if (user.userName !== '' && user.password !== '' ) {      
 
-       this.authentication(user.userName, user.password).subscribe(
-              successData => {
-                this.globals.customer = successData.response.content;
-                this.putSession(successData.response.content);
-                this.message = successData.response.message;
-              },
-              error => {
-                this._messageAlertHandleService.handleError(error);
-              },
-              () => {
-                if(this.globals.customer.id_rol != null){
-                    localStorage.setItem("token", this.message);
-                    this._messageAlertHandleService.handleSuccess('Login successful');
-                    this.loggedIn.next(true);
-                    this.router.navigate(['/dashboard']);                    
-                }else{
-                  this._messageAlertHandleService.handleError('You dont have any rol for access to this web. Contact the administrator to obtain permission');
-                }                
-              }
-        );
+       return this.authentication(user.userName, user.password);
     }
   }
 

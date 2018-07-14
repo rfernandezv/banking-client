@@ -6,10 +6,12 @@ import {HttpErrorResponse } from '@angular/common/http';
 import {ResponseApi } from '../models/dto/responseApi';
 import {Response as ResponseError } from '../models/response';
 import * as HttpStatus from 'http-status-codes'
+import { AuthService } from './auth/auth.service';
 
 @Injectable()
 export class MessageAlertHandleService {
     constructor(private router: Router, 
+                private authService : AuthService,
                 private toastr: ToastsManager
     ) {}
 
@@ -35,8 +37,8 @@ export class MessageAlertHandleService {
             if(res.status == HttpStatus.UNAUTHORIZED){
                 errorMessage = 'You are '+ err.statusText + ". Your credentials are not correct, try again";
                 this.toastr.error(errorMessage);
-                //this.authService.logout();
-                this.router.navigate(['/login']);
+                this.authService.logout();
+                //this.router.navigate(['/login']);
             }
             if(res.status == HttpStatus.INTERNAL_SERVER_ERROR){
                 this.toastr.error(err.statusText);
