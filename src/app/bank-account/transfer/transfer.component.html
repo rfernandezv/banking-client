@@ -30,7 +30,9 @@
                       <span matSuffix>.00</span>
                   </mat-form-field>
 
-                  <button mat-raised-button color="primary" type="submit" class="full-width-input">Transfer</button>
+                  <button mat-raised-button color="primary" type="submit" 
+                            [disabled]="BankAccountsOrigin.length == 0"
+                            class="full-width-input">Transfer</button>
               </form>
 </div>
 

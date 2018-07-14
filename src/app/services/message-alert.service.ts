@@ -1,13 +1,17 @@
 import {Injectable} from '@angular/core';
 import {ToastsManager} from 'ng2-toastr';
 import {Response} from '@angular/http';
+import {Router} from '@angular/router';
 import {HttpErrorResponse } from '@angular/common/http';
 import {ResponseApi } from '../models/dto/responseApi';
 import {Response as ResponseError } from '../models/response';
+import * as HttpStatus from 'http-status-codes'
 
 @Injectable()
 export class MessageAlertHandleService {
-    constructor(private toastr: ToastsManager) {}
+    constructor(private router: Router, 
+                private toastr: ToastsManager
+    ) {}
 
     handleError(err: any) {
 
@@ -20,7 +24,7 @@ export class MessageAlertHandleService {
         if(err instanceof HttpErrorResponse){
             const res: HttpErrorResponse = err;
 
-            if(res.status == 400){
+            if(res.status == HttpStatus.BAD_REQUEST){
                 const errorArray2: ResponseError = res.error.response;
                 errorArray2.errors.forEach(
                     error => {
@@ -28,11 +32,12 @@ export class MessageAlertHandleService {
                     }
                 );
             }
-            if(res.status == 401){
+            if(res.status == HttpStatus.UNAUTHORIZED){
                 errorMessage = 'You are '+ err.statusText + ". Your credentials are not correct, try again";
                 this.toastr.error(errorMessage);
+                this.router.navigate(['/login']);
             }
-            if(res.status == 500){
+            if(res.status == HttpStatus.INTERNAL_SERVER_ERROR){
                 this.toastr.error(err.statusText);
                 return;
             }            
@@ -69,8 +74,10 @@ export class MessageAlertHandleService {
     }
 
     handleSuccess(message: string) {
-
         this.toastr.success(message);
+    }
 
+    handleWarning(message: string) {
+        this.toastr.warning(message);
     }
 }

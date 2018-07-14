@@ -7,7 +7,7 @@ import {FormControl, Validators} from '@angular/forms';
 import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {RequestBankAccountDto} from '../../models/dto/requestBankAccountDto';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
-
+import * as HttpStatus from 'http-status-codes'
 
 @Component({
   selector: 'app-baza.dialog',
@@ -56,7 +56,7 @@ export class EditDialogBankComponent {
           successData => {              
             this.blockUI.stop();
             
-            if(successData.response.httpStatus == '200'){
+            if(successData.response.httpStatus == HttpStatus.OK.toString()){
               this._bankAccountService.dialogData = this.data;
               this._messageAlertHandleService.handleSuccess(successData.response.message);              
               this.dialogRef.close(1);

@@ -5,7 +5,7 @@ import {CustomerService} from '../../services/customer.service';
 import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
 import { RequestCustomerDto } from '../../models/dto/requestCustomerDto';
-
+import * as HttpStatus from 'http-status-codes'
 
 @Component({
   selector: 'app-activate.dialog',
@@ -44,7 +44,7 @@ export class ActivateDialogComponent {
         successData => {              
             this.blockUI.stop();
             
-            if(successData.response.httpStatus == '200'){
+            if(successData.response.httpStatus == HttpStatus.OK.toString()){
               this.data.isActive = 'true';
               this._customerService.dialogData = this.data;
               this._messageAlertHandleService.handleSuccess(successData.response.message);

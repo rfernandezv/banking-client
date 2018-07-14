@@ -4,7 +4,7 @@ import {BankAccount} from '../../models/bank-account';
 import {BankAccountService} from '../../services/bank-account.service';
 import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
-
+import * as HttpStatus from 'http-status-codes'
 
 @Component({
   selector: 'app-delete.dialog',
@@ -34,7 +34,7 @@ export class DeleteDialogBankComponent {
         successData => {
           this.blockUI.stop();
 
-          if(successData.response.httpStatus == '200'){
+          if(successData.response.httpStatus == HttpStatus.OK.toString()){
               this.data.isLocked = 'false';
               this._bankAccountService.dialogData = this.data;
               this._messageAlertHandleService.handleSuccess(successData.response.message);

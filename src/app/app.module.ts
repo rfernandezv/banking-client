@@ -11,13 +11,11 @@ import {
 } from '@angular/material';
 import { ToastModule } from 'ng2-toastr';
 import { BlockUIModule } from 'ng-block-ui';
-import { AppMaterialModule } from './app-material/app-material.module';
+import { AppMaterialModule } from './shared/components/app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthGuard } from './auth/auth.guard';
-import { AuthService } from './auth/auth.service';
-import { HeaderComponent } from './header/header.component';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './shared/components/home/home.component';
+import { HeaderComponent } from './shared/components/header/header.component';
 import { LoginComponent } from './login/login.component';
 import { CurrentOptionComponent } from './current-option/current-option.component';
 import { AddDialogComponent} from './customer/add/add.dialog.component';
@@ -33,8 +31,9 @@ import { CustomerService} from './services/customer.service';
 import { BankAccountService} from './services/bank-account.service';
 import { Globals} from './shared/models/globals';
 import { MessageAlertHandleService} from './services/message-alert.service';
-
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { AuthGuard } from './services/auth/auth.guard';
+import { AuthService } from './services/auth/auth.service';
 
 
 

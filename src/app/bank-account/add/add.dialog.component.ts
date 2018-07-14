@@ -7,6 +7,7 @@ import {Globals} from '../../shared/models/globals';
 import {BankAccount} from '../../models/bank-account';
 import {RequestBankAccountDto} from '../../models/dto/requestBankAccountDto';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
+import * as HttpStatus from 'http-status-codes'
 
 @Component({
   selector: 'app-add.dialog',
@@ -61,7 +62,7 @@ export class AddDialogBankComponent {
           successData => {              
               this.blockUI.stop();
               
-              if(successData.response.httpStatus == '201'){
+              if(successData.response.httpStatus == HttpStatus.CREATED.toString()){
                 this.updateNewBankAccount(this.data.number);
                 this._bankAccountService.dialogData = this.data;
                 this._messageAlertHandleService.handleSuccess(successData.response.message);
@@ -90,7 +91,6 @@ export class AddDialogBankComponent {
             }
         },
         error => {
-           console.log(error);
         },
         () => {}
     );

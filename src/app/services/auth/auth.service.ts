@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { User } from './user';
-import { Customer} from '../models/customer';
-import { Globals} from '../shared/models/globals';
+import { User } from '../../models/user';
 import { Observable} from 'rxjs/Observable';
-import { HttpOptionsConst} from '../shared/models/http-options';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { MessageAlertHandleService} from '../services/message-alert.service';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
-import { ResponseApi } from '../models/dto/responseApi';
+import { environment } from '../../../environments/environment';
+import { Globals } from '../../shared/models/globals';
+import { MessageAlertHandleService } from '../message-alert.service';
+import { Customer } from '../../models/customer';
+import { HttpOptionsConst } from '../../shared/models/http-options';
+import { ResponseApi } from '../../models/dto/responseApi';
 
 
 @Injectable()
@@ -25,12 +25,15 @@ export class AuthService {
   get isLoggedIn() {
     return this.loggedIn.asObservable();
   }
+  get isLoggedInValue(): boolean {
+    return this.loggedIn.value;
+  }
 
   constructor(
     private router: Router,
     private httpClient: HttpClient,
     private globals: Globals,
-    public _messageAlertHandleService: MessageAlertHandleService,
+    public _messageAlertHandleService: MessageAlertHandleService
   ) {}
 
   login(user: User) {
@@ -38,7 +41,8 @@ export class AuthService {
 
        this.authentication(user.userName, user.password).subscribe(
               successData => {
-                this.globals.customer = successData.response.content;                
+                this.globals.customer = successData.response.content;
+                this.putSession(successData.response.content);
                 this.message = successData.response.message;
               },
               error => {
@@ -71,5 +75,13 @@ export class AuthService {
                 res => res
               )
               .catch((error: any) => Observable.throw(error));
+  }
+
+  putSession(customer : Customer){
+    sessionStorage.setItem("id", ''+ customer.id);
+    sessionStorage.setItem("username", customer.user);
+    sessionStorage.setItem("firstName", customer.firstName);
+    sessionStorage.setItem("lastName", customer.lastName);
+    sessionStorage.setItem("id_rol", ''+ customer.id_rol);
   }
 }

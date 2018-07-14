@@ -7,6 +7,7 @@ import {Customer} from '../../models/customer';
 import {RequestCustomerDto} from '../../models/dto/requestCustomerDto';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
 import * as moment from 'moment';
+import * as HttpStatus from 'http-status-codes'
 
 @Component({
   selector: 'app-add.dialog',
@@ -72,7 +73,7 @@ export class AddDialogComponent {
           successData => {              
               this.blockUI.stop();
               
-              if(successData.response.httpStatus == '201'){
+              if(successData.response.httpStatus == HttpStatus.CREATED.toString()){
                 this.updateNewCustomer(this.data.documentNumber);
                 this._customerService.dialogData = this.data;
                 this._messageAlertHandleService.handleSuccess(successData.response.message);
@@ -99,7 +100,6 @@ export class AddDialogComponent {
             }
         },
         error => {
-           console.log(error);
         },
         () => {}
     );

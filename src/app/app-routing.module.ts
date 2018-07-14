@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { AuthGuard } from './auth/auth.guard';
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
 import { ListComponent } from './customer/list/list.component';
 import { ListComponent as ListBankAccountComponent } from './bank-account/list/list.component';
 import { TransferComponent } from './bank-account/transfer/transfer.component';
 import { CustomerModule } from './customer/customer.module';
 import { BankAccountModule } from './bank-account/bank-account.module';
 import { CurrentOptionComponent } from './current-option/current-option.component';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { HomeComponent } from './shared/components/home/home.component';
+import { AuthGuard } from './services/auth/auth.guard';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },  
   { path: 'dashboard', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'customer/list', component: ListComponent, canActivate: [AuthGuard] },

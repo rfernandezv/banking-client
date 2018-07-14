@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { AuthService } from '../services/auth/auth.service';
 
-import { AuthService } from './../auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       userName: new FormControl('', [Validators.required, Validators.maxLength(18)] ),
-      password: new FormControl('', [Validators.required, Validators.maxLength(18)] )
+      password: new FormControl('', [Validators.required, Validators.maxLength(64)] )
     });
   }
 

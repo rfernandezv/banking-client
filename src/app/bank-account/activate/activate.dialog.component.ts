@@ -5,6 +5,7 @@ import {BankAccountService} from '../../services/bank-account.service';
 import {BlockUI, NgBlockUI } from 'ng-block-ui';
 import {MessageAlertHandleService} from '../../services/message-alert.service';
 import { RequestBankAccountDto } from '../../models/dto/requestBankAccountDto';
+import * as HttpStatus from 'http-status-codes'
 
 
 @Component({
@@ -43,7 +44,7 @@ export class ActivateDialogBankComponent {
           successData => {              
             this.blockUI.stop();
             
-            if(successData.response.httpStatus == '200'){
+            if(successData.response.httpStatus == HttpStatus.OK.toString()){
               this.data.isLocked = 'false';
               this._bankAccountService.dialogData = this.data;
               this._messageAlertHandleService.handleSuccess(successData.response.message);              

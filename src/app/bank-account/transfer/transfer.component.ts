@@ -56,15 +56,17 @@ export class TransferComponent implements OnInit, OnDestroy {
   }
   
   loadBankAccounts() : void{
-      this._bankAccountService.getAllBankAccountByCustomerId(this.globals.customer.id).subscribe(
+      this._bankAccountService.getAllBankAccountByCustomerId(parseInt(sessionStorage.getItem("id"))).subscribe(
         successData => {
           this.BankAccountsOrigin = successData;
+          if(this.BankAccountsOrigin.length == 0){
+            this._messageAlertHandleService.handleWarning("Your user dont have any associated bank account ");
+          }
         },
         error => {
-          this._messageAlertHandleService.handleError("Failed to load resource bank account ");
+          this._messageAlertHandleService.handleError(error);
         },
-        () => {
-         // everything successful
+        () => {         
         }
       );
   }
