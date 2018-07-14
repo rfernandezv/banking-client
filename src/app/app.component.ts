@@ -24,10 +24,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-      console.log('app.component');
+      console.log(this._authService);
       this._router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe(() => {
       this.isAuthenticated = this._authService.isLoggedInValue;
-      console.log(this.isAuthenticated);
+      
     });
   }
 }

@@ -17,6 +17,9 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
+import { AuthGuard } from '../services/auth/auth.guard';
+import { AuthService } from '../services/auth/auth.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -33,6 +36,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     MatPaginatorModule,
     MatSelectModule
     
+  ],
+  providers: [
+    AuthService, AuthGuard
   ],
   declarations: [ListComponent, TransferComponent]
 })
