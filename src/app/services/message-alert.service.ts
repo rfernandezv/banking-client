@@ -6,12 +6,10 @@ import {HttpErrorResponse } from '@angular/common/http';
 import {ResponseApi } from '../models/dto/responseApi';
 import {Response as ResponseError } from '../models/response';
 import * as HttpStatus from 'http-status-codes'
-import { AuthService } from './auth/auth.service';
 
 @Injectable()
 export class MessageAlertHandleService {
     constructor(private router: Router, 
-                private authService : AuthService,
                 private toastr: ToastsManager
     ) {}
 
