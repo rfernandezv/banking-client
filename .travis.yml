@@ -10,6 +10,7 @@ script:
 - ng build --prod
 deploy:
   provider: cloudfoundry
+  skip_cleanup: true
   username: 
      secure: "pBk1qZKrxFONQLv15pkmhY10vuMD3qhbOqnwDzR8spRm8O1LhWG0cf6/NzK46vxiPSHVcIzaoWx444jr5pLdpcjlH0DTEUvbM+CywsduKhiwmFmb18LlwNkWFdA6nN5pF/Ukhd4DJpA5rbLP4tKC3z/1tpk+p0Uhj3HPmwhTrORyKPCws78frfH1CqNXavfkVywvLV0E/TljzpmQanCAWkbY6XGKTctBbEifUMbxfTLtqS1t96yks+RH4iBmOOMlgUTcdKsR1vTFJw4HmrN5MBd43+f5+FDPQh/rj1NEaAK1ifopFKuHO1dF2UWCXkr+NzwVE5ylpzvmaZDF4N10WMkqqYWX3aD+u868ZFM3vyCkhmRvwUDuivqpXOuI3mwmZRAtWhvxVp1LKsLD/gORUJyQl2tptcLUSbFqGg1iR3zPNh+gDizgP+ErnxJMdTqh4BSQ9XMGViT7zBHtRWZjlpFGojcODDqZJ5SgyMDaQB2BBg2TcxZ9v6VUex6DWtkQMWgWcqYziRXdTnrB+GJ9/koo59mwlPmQQfVXy2KwXBIEE6IRNW6+7e82+KFagQZyImHYjVwgsxt3/xl3zP84ZQWKdWQ0miYVHlwCvmScQywQCAtZKCxYjmyAMIDmzUhx4QpKFJiXgAiyOF1SiTsYZW+KQG9GMzoYNHRqdLzBfzA="
   password: 
@@ -18,7 +19,7 @@ deploy:
   organization: 
      secure: "TJV/7HJlrDj8kmTFAi+yq/9gdFVK50CWwJ0ugjjdyT5dpwreO2lGXIvqZAfhl5kEwEiFolJnRdxhDfVx/pnXwnaGLTdl6EOeeAEZA2YpJZEDilJVpujRqD+bJa12zYuHYRlubFTqsctBeEQGOkbzt7m+7JAru8ZBA2UP65xwv2o7DhFiSOnRpuU90q8TnGGmbO2VYWqyz+zfzTmpcygbqZFcmwJPkQ3wd76ixzGTo/M57Ko+NMWIUhdjgOnGQbXwjXrppjV0aGjgjXp01eTWgXuD8Ww5lE4S1MoN2tvIcarotF/F4nvvBIT4kpGXd+uIWTAQlkL2kGT0w0n4wjLNK7kjzRuJBGlq7VAHb9Eom/562YDhqgVk2MFE+RFQm6kXRbHmrSxNyfB0srd3o6cQVlGUKHK+eq6+QfDkABR8WHAJCv5YYe//x5Lel6Btef+JS1sHEn2DJwvDXtnB0l9zd230dOcXUTg0MrREra4vP0zBpWq3RXSlmQHYJM5IXztlZJ8ExxNjlxRDD1Uqqp0jTM0IHQ3voLujUFpOQMNdXfqAXJhrxjgDoKnx37Hb1uMA2bBr7tfI0bxgbBCUXRUxh7ad8zQJPKv5szqj9LXQcJPm/gP44SUo/A4whCDg3qxf0MKYq3XNaScx4NlYgubAuLYIJI/n3RUOf/DtuInrmp4="
     
-  space: qa
+  space: development
 notifications:
   email:
     on_failure: change
